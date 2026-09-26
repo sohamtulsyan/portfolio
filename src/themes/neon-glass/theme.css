@@ -1,0 +1,215 @@
+/* ==========================================================================
+   THEME: Neon Glass
+   --------------------------------------------------------------------------
+   Every visual decision on the site resolves to a token in this file.
+   To re-theme: copy this folder, change the values, and point
+   src/app/globals.css + src/themes/index.ts at the new folder.
+
+   Layers (top to bottom, each only references the layer above it):
+     1. Palette     raw brand colours, the only hex values in the codebase
+     2. Semantic    what a colour is *for* (surface, text, accent...)
+     3. Material    glass, glow, depth
+     4. Shape/Type/Motion
+     5. Components  per-component knobs (nav, buttons, cards...)
+     6. Effects     values read by the WebGL/JS effects at runtime
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  /* 1. Palette ------------------------------------------------------------
+     coolors.co/palette/353535-3c6e71-ffffff-d9d9d9-284b63
+     Strict: no colours outside these five. "Neon" comes from glow + blur. */
+  --palette-charcoal: #353535;
+  --palette-teal: #3c6e71;
+  --palette-white: #ffffff;
+  --palette-mist: #d9d9d9;
+  --palette-navy: #284b63;
+  --shadow-ink: #000000; /* shadows only, never a visible surface or text colour */
+
+  /* 2. Semantic ------------------------------------------------------------ */
+  --ui-bg: var(--palette-charcoal);
+  --ui-bg-accent: var(--palette-navy);
+  --ui-text: var(--palette-white);
+  --ui-text-muted: var(--palette-mist);
+  --ui-text-subtle: color-mix(in srgb, var(--palette-mist) 72%, transparent);
+  --ui-accent: var(--palette-teal);
+  --ui-accent-strong: var(--palette-navy);
+  --ui-on-accent: var(--palette-white);
+  --ui-border: color-mix(in srgb, var(--palette-white) 12%, transparent);
+  --ui-border-strong: color-mix(in srgb, var(--palette-white) 24%, transparent);
+  --ui-focus: var(--palette-white);
+  --ui-selection: color-mix(in srgb, var(--palette-teal) 70%, transparent);
+  --ui-danger: var(--palette-white); /* palette has no red: errors lean on icon + copy */
+
+  /* 3. Material ------------------------------------------------------------ */
+  --glass-bg: color-mix(in srgb, var(--palette-white) 6%, transparent);
+  --glass-bg-strong: color-mix(in srgb, var(--palette-charcoal) 62%, transparent);
+  --glass-border: color-mix(in srgb, var(--palette-white) 14%, transparent);
+  --glass-highlight: color-mix(in srgb, var(--palette-white) 22%, transparent);
+  --glass-blur: 18px;
+  --glass-saturate: 140%;
+
+  /* Neon = light, not hue. Teal and white halos at graded intensities. */
+  --glow-color: var(--palette-teal);
+  --glow-sm: 0 0 12px color-mix(in srgb, var(--glow-color) 65%, transparent);
+  --glow-md: 0 0 18px color-mix(in srgb, var(--glow-color) 70%, transparent),
+    0 0 48px color-mix(in srgb, var(--glow-color) 35%, transparent);
+  --glow-lg: 0 0 24px color-mix(in srgb, var(--glow-color) 80%, transparent),
+    0 0 80px color-mix(in srgb, var(--glow-color) 45%, transparent);
+  --glow-white: 0 0 18px color-mix(in srgb, var(--palette-white) 45%, transparent);
+  --ui-text-glow: 0 0 24px color-mix(in srgb, var(--palette-teal) 90%, transparent);
+
+  --shadow-depth: 0 24px 60px -24px color-mix(in srgb, var(--shadow-ink) 70%, transparent);
+  --shadow-float: 0 12px 32px -8px color-mix(in srgb, var(--shadow-ink) 55%, transparent);
+
+  /* Lit edge: the gradient hairline drawn around glass panels */
+  --edge-gradient: linear-gradient(
+    140deg,
+    color-mix(in srgb, var(--palette-white) 55%, transparent) 0%,
+    color-mix(in srgb, var(--palette-teal) 90%, transparent) 28%,
+    transparent 55%,
+    color-mix(in srgb, var(--palette-navy) 90%, transparent) 100%
+  );
+
+  /* Ambient light blooms behind content */
+  --ambient: radial-gradient(
+      60rem 40rem at 85% -10%,
+      color-mix(in srgb, var(--palette-navy) 55%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      50rem 36rem at -10% 110%,
+      color-mix(in srgb, var(--palette-teal) 28%, transparent),
+      transparent 70%
+    );
+
+  /* 4a. Shape -------------------------------------------------------------- */
+  --shape-sm: 10px;
+  --shape-md: 16px;
+  --shape-lg: 28px;
+  --shape-pill: 999px;
+
+  /* 4b. Type --------------------------------------------------------------- */
+  --type-font-sans: var(--font-urbanist), ui-sans-serif, system-ui, sans-serif;
+  --type-font-display: var(--font-urbanist), ui-sans-serif, system-ui, sans-serif;
+  --type-weight-body: 400;
+  --type-weight-strong: 600;
+  --type-weight-heading: 700;
+  --type-weight-display: 800;
+  --type-tracking-display: -0.035em;
+  --type-tracking-heading: -0.02em;
+  --type-tracking-body: 0;
+  --type-leading-display: 0.95;
+  --type-leading-heading: 1.1;
+  --type-leading-body: 1.6;
+
+  --type-size-xs: 0.8125rem;
+  --type-size-sm: 0.9375rem;
+  --type-size-base: 1.0625rem;
+  --type-size-lg: 1.25rem;
+  --type-size-xl: clamp(1.4rem, 1.2rem + 0.8vw, 1.75rem);
+  --type-size-2xl: clamp(1.9rem, 1.5rem + 1.6vw, 2.75rem);
+  --type-size-3xl: clamp(2.4rem, 1.8rem + 3vw, 4rem);
+  --type-size-display: clamp(3.25rem, 1.6rem + 7vw, 6rem);
+
+  --layout-measure: 68ch;
+
+  /* 4c. Space & layout ---------------------------------------------------- */
+  --layout-container: 76rem;
+  --layout-gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --layout-section-gap: clamp(5rem, 3rem + 8vw, 10rem);
+
+  /* 4d. Motion ------------------------------------------------------------- */
+  --motion-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --motion-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --motion-fast: 160ms;
+  --motion-base: 280ms;
+  --motion-slow: 600ms;
+
+  /* 5. Components ---------------------------------------------------------- */
+  /* Floating navigation (rareui) */
+  --nav-bg: color-mix(in srgb, var(--palette-charcoal) 55%, transparent);
+  --nav-border: var(--glass-border);
+  --nav-fg: var(--ui-text-subtle);
+  --nav-fg-hover: var(--palette-white);
+  --nav-hover-bg: color-mix(in srgb, var(--palette-white) 10%, transparent);
+  --nav-active-bg: linear-gradient(180deg, var(--palette-white), var(--palette-mist));
+  --nav-active-fg: var(--palette-charcoal);
+  --nav-active-glow: var(--glow-md);
+  --nav-tooltip-bg: var(--palette-white);
+  --nav-tooltip-fg: var(--palette-charcoal);
+
+  /* Primary button */
+  --btn-primary-bg: var(--palette-teal);
+  --btn-primary-fg: var(--palette-white);
+  --btn-primary-border: color-mix(in srgb, var(--palette-white) 30%, transparent);
+  --btn-primary-glow: var(--glow-md);
+  --btn-primary-glow-hover: var(--glow-lg);
+
+  /* Soft button (rareui neumorphic) */
+  --btn-soft-fg: var(--ui-text);
+  --btn-soft-shadow: 4px 4px 6px 0 color-mix(in srgb, var(--palette-white) 5%, transparent),
+    -4px -4px 6px 0 color-mix(in srgb, var(--shadow-ink) 50%, transparent),
+    inset -4px -4px 6px 0 color-mix(in srgb, var(--palette-white) 5%, transparent),
+    inset 4px 4px 6px 0 color-mix(in srgb, var(--shadow-ink) 60%, transparent);
+  --btn-soft-hover-bg: var(--palette-white);
+  --btn-soft-hover-fg: var(--palette-charcoal);
+  --btn-soft-hover-shadow: 0 0 20px color-mix(in srgb, var(--palette-teal) 80%, transparent),
+    4px 4px 8px 0 color-mix(in srgb, var(--palette-white) 8%, transparent),
+    -4px -4px 8px 0 color-mix(in srgb, var(--shadow-ink) 60%, transparent);
+
+  /* Cards / panels */
+  --card-bg: var(--glass-bg);
+  --card-border: var(--glass-border);
+  --card-hover-glow: var(--glow-md);
+
+  /* Chips */
+  --chip-bg: color-mix(in srgb, var(--palette-white) 8%, transparent);
+  --chip-fg: var(--ui-text-muted);
+  --chip-active-bg: var(--palette-teal);
+  --chip-active-fg: var(--palette-white);
+
+  /* Form fields */
+  --field-bg: color-mix(in srgb, var(--palette-charcoal) 70%, transparent);
+  --field-border: var(--ui-border-strong);
+  --field-focus-border: var(--palette-teal);
+  --field-focus-glow: var(--glow-sm);
+
+  /* Hero portrait */
+  --portrait-tint: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--palette-navy) 55%, transparent),
+    transparent 55%
+  );
+  --portrait-glow: drop-shadow(0 0 40px color-mix(in srgb, var(--palette-teal) 55%, transparent));
+
+  /* Bottom band: progressive blur + nav + socials, fixed on every page */
+  --band-height: 9rem;
+  --band-tint: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--palette-charcoal) 85%, transparent)
+  );
+
+  /* 6. Effects (read at runtime by WebGL / JS components) ------------------ */
+  /* Liquid wave hero background (rareui). Ramp runs slow → fast flow:
+     flow speed saturates quickly, so the top stop is what you mostly see. */
+  --wave-color-1: var(--palette-navy);
+  --wave-color-2: var(--palette-teal);
+  --wave-color-3: var(--palette-teal);
+  --wave-opacity: 1;
+  --wave-blend: screen; /* adds light to the background, like neon */
+  --wave-filter: brightness(1.5) saturate(1.3); /* the glow; hues stay the palette's */
+
+  /* Zoom wash page transition (smoothui) */
+  --transition-color-1: var(--palette-teal);
+  --transition-color-2: var(--palette-mist);
+  --transition-veil-blur: 10px;
+  --transition-veil-opacity: 0.3;
+
+  /* Lattice loader (reactbits) */
+  --loader-color: var(--palette-white);
+  --loader-glow: var(--palette-teal);
+  --loader-bg: var(--palette-charcoal);
+}

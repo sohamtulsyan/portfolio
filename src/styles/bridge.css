@@ -1,0 +1,44 @@
+/* ==========================================================================
+   Tailwind bridge (theme-agnostic)
+   Maps the active theme's tokens onto Tailwind utilities, so components can
+   write `bg-bg text-muted rounded-md font-display` and never hard-code a
+   value. Every theme must define the tokens referenced here.
+   ========================================================================== */
+
+@theme inline {
+  --color-bg: var(--ui-bg);
+  --color-bg-accent: var(--ui-bg-accent);
+  --color-fg: var(--ui-text);
+  --color-muted: var(--ui-text-muted);
+  --color-subtle: var(--ui-text-subtle);
+  --color-accent: var(--ui-accent);
+  --color-accent-strong: var(--ui-accent-strong);
+  --color-on-accent: var(--ui-on-accent);
+  --color-line: var(--ui-border);
+  --color-line-strong: var(--ui-border-strong);
+  --color-glass: var(--glass-bg);
+  --color-glass-strong: var(--glass-bg-strong);
+
+  --font-sans: var(--type-font-sans);
+  --font-display: var(--type-font-display);
+
+  --radius-sm: var(--shape-sm);
+  --radius-md: var(--shape-md);
+  --radius-lg: var(--shape-lg);
+  --radius-pill: var(--shape-pill);
+
+  --text-xs: var(--type-size-xs);
+  --text-sm: var(--type-size-sm);
+  --text-base: var(--type-size-base);
+  --text-lg: var(--type-size-lg);
+  --text-xl: var(--type-size-xl);
+  --text-2xl: var(--type-size-2xl);
+  --text-3xl: var(--type-size-3xl);
+  --text-display: var(--type-size-display);
+
+  --ease-out: var(--motion-ease-out);
+  --ease-in-out: var(--motion-ease-in-out);
+
+  --shadow-depth: var(--shadow-depth);
+  --shadow-float: var(--shadow-float);
+}

@@ -1,0 +1,177 @@
+/* ==========================================================================
+   Base + primitives (theme-agnostic)
+   Element defaults and the few reusable material classes. Only tokens here,
+   never raw values, so a theme swap restyles all of it.
+   ========================================================================== */
+
+@layer base {
+  html {
+    background: var(--ui-bg);
+    color: var(--ui-text);
+    font-family: var(--type-font-sans);
+    font-weight: var(--type-weight-body);
+    line-height: var(--type-leading-body);
+    letter-spacing: var(--type-tracking-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scrollbar-color: var(--ui-border-strong) transparent;
+    scrollbar-width: thin;
+  }
+
+  body {
+    min-height: 100dvh;
+    background: var(--ambient), var(--ui-bg);
+    background-attachment: fixed;
+    font-size: var(--type-size-base);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--type-font-display);
+    font-weight: var(--type-weight-heading);
+    letter-spacing: var(--type-tracking-heading);
+    line-height: var(--type-leading-heading);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1px;
+  }
+
+  ::selection {
+    background: var(--ui-selection);
+    color: var(--ui-text);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ui-focus);
+    outline-offset: 3px;
+    border-radius: var(--shape-sm);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--ui-border-strong);
+    border-radius: var(--shape-pill);
+    border: 3px solid var(--ui-bg);
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  input,
+  textarea {
+    caret-color: var(--ui-accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Frosted glass surface */
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow-depth);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  }
+
+  /* Lit edge: gradient hairline that turns a glass panel into a light source.
+     Pair with .glass; replaces its flat border. */
+  .lit-edge {
+    position: relative;
+    border-color: transparent;
+  }
+  .lit-edge::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    padding: 1px;
+    border-radius: inherit;
+    background: var(--edge-gradient);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .neon-text {
+    text-shadow: var(--ui-text-glow);
+  }
+
+  .container-page {
+    width: 100%;
+    max-width: var(--layout-container);
+    margin-inline: auto;
+    padding-inline: var(--layout-gutter);
+  }
+
+  .measure {
+    max-width: var(--layout-measure);
+  }
+
+  .section-gap {
+    margin-top: var(--layout-section-gap);
+  }
+
+  .display {
+    font-family: var(--type-font-display);
+    font-weight: var(--type-weight-display);
+    font-size: var(--type-size-display);
+    letter-spacing: var(--type-tracking-display);
+    line-height: var(--type-leading-display);
+  }
+}
+
+/* Page transition veil: the outgoing page softens while the shader wash
+   covers the route swap (see src/components/effects/PageTransition.tsx). */
+@layer base {
+  main {
+    transition:
+      filter var(--motion-slow) var(--motion-ease-out),
+      opacity var(--motion-slow) var(--motion-ease-out);
+  }
+  html[data-transitioning] main {
+    filter: blur(var(--transition-veil-blur, 8px));
+    opacity: var(--transition-veil-opacity, 0.35);
+  }
+}
+
+/* Splash failsafe + session skip (see src/components/effects/Splash.tsx).
+   Unlayered on purpose so it outranks the overlay's Tailwind display utility. */
+.splash {
+  animation: splash-failsafe 0.5s var(--motion-ease-out) 5s forwards;
+}
+html[data-splash="off"] .splash {
+  display: none;
+}
+@keyframes splash-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
