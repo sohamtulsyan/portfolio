@@ -1,0 +1,223 @@
+/* ==========================================================================
+   THEME: Studio
+   --------------------------------------------------------------------------
+   Quiet, Apple-leaning: solid surfaces, one accent, type doing the work.
+   Every visual decision on the site resolves to a token in this file.
+   To re-theme: copy this folder, change the values, and point
+   src/app/globals.css + src/themes/index.ts at the new folder.
+
+   Layers (top to bottom, each only references the layer above it):
+     1. Palette     the four brand colours, the only hex values in the codebase
+     2. Semantic    what a colour is *for*, per colour scheme (dark / light)
+     3. Material    surfaces, chrome, depth
+     4. Shape/Type/Motion
+     5. Components  per-component knobs (nav, buttons, chips, fields)
+   ========================================================================== */
+
+:root {
+  /* 1. Palette ------------------------------------------------------------
+     Strict: four colours. Everything else is a mix of these. */
+  --palette-night: #0e2931;   /* dark background / light-mode text */
+  --palette-mist: #e2e2e0;    /* dark-mode text / light background */
+  --palette-teal: #2b7574;    /* primary: fills, active states, focus */
+  --palette-crimson: #861211; /* errors only */
+
+  /* Shadow and highlight inks. Never a visible surface or text colour. */
+  --shadow-ink: #000000;
+  --highlight-ink: #ffffff;
+
+  /* 4a. Shape -------------------------------------------------------------- */
+  --shape-sm: 8px;
+  --shape-md: 14px;
+  --shape-lg: 24px;
+  --shape-pill: 999px;
+
+  /* 4b. Type ---------------------------------------------------------------
+     SF Pro on Apple devices (optical sizes built in), Inter everywhere else.
+     Tracking is set per size: tight for display, near zero for body. */
+  --type-font-sans: -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui, sans-serif;
+  --type-font-display: -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui, sans-serif;
+  --type-weight-body: 400;
+  --type-weight-strong: 600;
+  --type-weight-heading: 600;
+  --type-weight-display: 600;
+  --type-tracking-display: -0.032em;
+  --type-tracking-heading: -0.022em;
+  --type-tracking-title: -0.014em;
+  --type-tracking-body: -0.008em;
+  --type-tracking-small: 0.004em;
+  --type-leading-display: 1.02;
+  --type-leading-heading: 1.08;
+  --type-leading-body: 1.5;
+
+  --type-size-xs: 0.8125rem;
+  --type-size-sm: 0.9375rem;
+  --type-size-base: 1.0625rem;
+  --type-size-lg: clamp(1.1875rem, 1.1rem + 0.35vw, 1.3125rem);
+  --type-size-xl: clamp(1.375rem, 1.2rem + 0.7vw, 1.75rem);
+  --type-size-2xl: clamp(1.875rem, 1.45rem + 1.7vw, 2.75rem);
+  --type-size-3xl: clamp(2.5rem, 1.8rem + 2.9vw, 4rem);
+  --type-size-display: clamp(3rem, 1.6rem + 5.6vw, 5.5rem);
+
+  --layout-measure: 64ch;
+
+  /* 4c. Space & layout ---------------------------------------------------- */
+  --layout-container: 72rem;
+  --layout-gutter: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
+  --layout-section-gap: clamp(6rem, 4rem + 7vw, 11rem);
+
+  /* 4d. Motion -------------------------------------------------------------
+     Critically damped feel: fast start, long soft settle, no overshoot. */
+  --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --motion-press: 100ms;
+  --motion-fast: 180ms;
+  --motion-base: 320ms;
+  --motion-slow: 700ms;
+
+  /* Bottom band: reserved space for the mobile dock */
+  --band-height: 6.5rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --band-height: 0rem;
+  }
+}
+
+/* 2-5. Dark (default) ----------------------------------------------------- */
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --ui-bg: var(--palette-night);
+  --ui-text: var(--palette-mist);
+  --ui-text-muted: color-mix(in srgb, var(--palette-mist) 72%, var(--palette-night));
+  --ui-text-subtle: color-mix(in srgb, var(--palette-mist) 58%, var(--palette-night));
+  --ui-accent: var(--palette-teal);
+  /* Teal as text needs lifting toward mist to read on night (6.4:1). */
+  --ui-accent-text: color-mix(in srgb, var(--palette-teal) 50%, var(--palette-mist));
+  --ui-on-accent: var(--palette-mist);
+  --ui-border: color-mix(in srgb, var(--palette-mist) 11%, transparent);
+  --ui-border-strong: color-mix(in srgb, var(--palette-mist) 22%, transparent);
+  --ui-focus: var(--ui-accent-text);
+  --ui-selection: color-mix(in srgb, var(--palette-teal) 65%, transparent);
+  /* Crimson lifted toward mist so error text reads on night (4.8:1). */
+  --ui-danger: color-mix(in srgb, var(--palette-crimson) 45%, var(--palette-mist));
+
+  /* 3. Material */
+  --surface: color-mix(in srgb, var(--palette-mist) 5%, var(--palette-night));
+  --surface-2: color-mix(in srgb, var(--palette-mist) 9%, var(--palette-night));
+  --chrome-bg: color-mix(in srgb, var(--palette-night) 70%, transparent);
+  /* Heavier material for panels that sit over text (mobile "More" sheet) */
+  --chrome-bg-heavy: color-mix(in srgb, var(--surface) 92%, transparent);
+  --chrome-border: color-mix(in srgb, var(--palette-mist) 12%, transparent);
+  --chrome-filter: blur(20px) saturate(170%);
+  --shadow-float: 0 10px 30px -12px color-mix(in srgb, var(--shadow-ink) 55%, transparent);
+  --shadow-raise: 0 24px 48px -28px color-mix(in srgb, var(--shadow-ink) 70%, transparent);
+
+  /* 5. Components */
+  --nav-bg: var(--chrome-bg);
+  --nav-border: var(--chrome-border);
+  --nav-fg: var(--ui-text-muted);
+  --nav-fg-hover: var(--ui-text);
+  --nav-hover-bg: color-mix(in srgb, var(--palette-mist) 9%, transparent);
+  --nav-active-bg: var(--palette-mist);
+  --nav-active-fg: var(--palette-night);
+  --nav-tooltip-bg: var(--palette-mist);
+  --nav-tooltip-fg: var(--palette-night);
+
+  /* Primary: teal deepened just enough for 4.5:1 with mist text. */
+  --btn-primary-bg: color-mix(in srgb, var(--palette-teal) 86%, var(--palette-night));
+  --btn-primary-bg-hover: color-mix(in srgb, var(--palette-teal) 74%, var(--palette-night));
+  --btn-primary-fg: var(--palette-mist);
+
+  /* Soft button (rareui neumorphic), lit from the top-left */
+  --btn-soft-fg: var(--ui-text);
+  --btn-soft-edge: color-mix(in srgb, var(--shadow-ink) 20%, transparent);
+  --btn-soft-shadow: 4px 4px 6px 0 color-mix(in srgb, var(--palette-mist) 5%, transparent),
+    -4px -4px 6px 0 color-mix(in srgb, var(--shadow-ink) 45%, transparent),
+    inset -4px -4px 6px 0 color-mix(in srgb, var(--palette-mist) 5%, transparent),
+    inset 4px 4px 6px 0 color-mix(in srgb, var(--shadow-ink) 55%, transparent);
+  --btn-soft-hover-bg: var(--palette-mist);
+  --btn-soft-hover-fg: var(--palette-night);
+  --btn-soft-hover-shadow: 0 10px 24px -10px color-mix(in srgb, var(--shadow-ink) 70%, transparent);
+
+  --chip-bg: color-mix(in srgb, var(--palette-mist) 7%, transparent);
+  --chip-fg: var(--ui-text-muted);
+  --chip-active-bg: var(--palette-mist);
+  --chip-active-fg: var(--palette-night);
+
+  --field-bg: var(--surface);
+  --field-border: var(--ui-border-strong);
+  --field-focus-border: var(--ui-accent-text);
+  --field-focus-ring: 0 0 0 4px color-mix(in srgb, var(--palette-teal) 35%, transparent);
+
+  --cover-placeholder: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--palette-teal) 30%, var(--palette-night)),
+    var(--surface) 70%
+  );
+}
+
+/* 2-5. Light: background and text swap ---------------------------------- */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --ui-bg: var(--palette-mist);
+  --ui-text: var(--palette-night);
+  --ui-text-muted: color-mix(in srgb, var(--palette-night) 78%, var(--palette-mist));
+  --ui-text-subtle: color-mix(in srgb, var(--palette-night) 68%, var(--palette-mist));
+  --ui-accent: var(--palette-teal);
+  /* Teal deepened toward night to read as text on mist (5.2:1). */
+  --ui-accent-text: color-mix(in srgb, var(--palette-teal) 78%, var(--palette-night));
+  --ui-on-accent: var(--palette-mist);
+  --ui-border: color-mix(in srgb, var(--palette-night) 12%, transparent);
+  --ui-border-strong: color-mix(in srgb, var(--palette-night) 24%, transparent);
+  --ui-focus: var(--ui-accent-text);
+  --ui-selection: color-mix(in srgb, var(--palette-teal) 30%, transparent);
+  --ui-danger: var(--palette-crimson);
+
+  /* Light surfaces lift toward white, like paper on a grey desk. */
+  --surface: color-mix(in srgb, var(--palette-mist) 45%, var(--highlight-ink));
+  --surface-2: color-mix(in srgb, var(--palette-mist) 25%, var(--highlight-ink));
+  --chrome-bg: color-mix(in srgb, var(--surface) 72%, transparent);
+  --chrome-bg-heavy: color-mix(in srgb, var(--surface) 92%, transparent);
+  --chrome-border: color-mix(in srgb, var(--palette-night) 9%, transparent);
+  --shadow-float: 0 10px 30px -14px color-mix(in srgb, var(--palette-night) 30%, transparent);
+  --shadow-raise: 0 24px 48px -30px color-mix(in srgb, var(--palette-night) 40%, transparent);
+
+  --nav-hover-bg: color-mix(in srgb, var(--palette-night) 7%, transparent);
+  --nav-active-bg: var(--palette-night);
+  --nav-active-fg: var(--palette-mist);
+  --nav-tooltip-bg: var(--palette-night);
+  --nav-tooltip-fg: var(--palette-mist);
+
+  --btn-soft-edge: color-mix(in srgb, var(--palette-night) 8%, transparent);
+  --btn-soft-shadow: -4px -4px 8px 0 color-mix(in srgb, var(--highlight-ink) 75%, transparent),
+    4px 4px 8px 0 color-mix(in srgb, var(--palette-night) 16%, transparent),
+    inset 2px 2px 3px 0 color-mix(in srgb, var(--highlight-ink) 55%, transparent),
+    inset -2px -2px 3px 0 color-mix(in srgb, var(--palette-night) 8%, transparent);
+  --btn-soft-hover-bg: var(--palette-night);
+  --btn-soft-hover-fg: var(--palette-mist);
+  --btn-soft-hover-shadow: 0 10px 24px -12px color-mix(in srgb, var(--palette-night) 50%, transparent);
+
+  --chip-bg: color-mix(in srgb, var(--palette-night) 6%, transparent);
+  --chip-active-bg: var(--palette-night);
+  --chip-active-fg: var(--palette-mist);
+
+  --cover-placeholder: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--palette-teal) 22%, var(--surface)),
+    var(--surface) 70%
+  );
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root,
+  :root[data-theme] {
+    --chrome-bg: var(--surface);
+    --chrome-bg-heavy: var(--surface);
+    --chrome-filter: none;
+  }
+}

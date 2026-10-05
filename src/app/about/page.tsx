@@ -25,9 +25,9 @@ export default function AboutPage() {
       <PageHeader title="About" lead={profile.aboutSummary || profile.intro || undefined} />
 
       <div className="container-page mt-16 grid gap-14 lg:grid-cols-[17rem_1fr] lg:gap-20">
-        <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div className="glass lit-edge max-w-[17rem] rounded-lg p-2">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[calc(var(--shape-lg)-0.5rem)]">
+        <aside className="lg:sticky lg:top-28 lg:self-start">
+          <div className="max-w-[17rem]">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-lg bg-surface shadow-[var(--shadow-raise)]">
               <Image
                 src={profile.photoUrl ?? site.portrait.src}
                 alt={`Portrait of ${profile.name}`}
@@ -36,7 +36,6 @@ export default function AboutPage() {
                 className="object-cover"
                 style={{ objectPosition: profile.photoUrl ? "50% 35%" : site.portrait.focus }}
               />
-              <div aria-hidden="true" className="absolute inset-0 [background:var(--portrait-tint)]" />
             </div>
           </div>
 
@@ -44,7 +43,7 @@ export default function AboutPage() {
             <dl className="mt-8 space-y-4">
               {facts.map((f) => (
                 <div key={f.label}>
-                  <dt className="text-xs text-subtle">{f.label}</dt>
+                  <dt className="meta text-xs text-subtle">{f.label}</dt>
                   <dd className="font-semibold text-fg">{f.value}</dd>
                 </div>
               ))}

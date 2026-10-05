@@ -7,17 +7,17 @@
 
 @theme inline {
   --color-bg: var(--ui-bg);
-  --color-bg-accent: var(--ui-bg-accent);
   --color-fg: var(--ui-text);
   --color-muted: var(--ui-text-muted);
   --color-subtle: var(--ui-text-subtle);
   --color-accent: var(--ui-accent);
-  --color-accent-strong: var(--ui-accent-strong);
+  --color-accent-text: var(--ui-accent-text);
   --color-on-accent: var(--ui-on-accent);
   --color-line: var(--ui-border);
   --color-line-strong: var(--ui-border-strong);
-  --color-glass: var(--glass-bg);
-  --color-glass-strong: var(--glass-bg-strong);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-danger: var(--ui-danger);
 
   --font-sans: var(--type-font-sans);
   --font-display: var(--type-font-display);
@@ -39,6 +39,6 @@
   --ease-out: var(--motion-ease-out);
   --ease-in-out: var(--motion-ease-in-out);
 
-  --shadow-depth: var(--shadow-depth);
   --shadow-float: var(--shadow-float);
+  --shadow-raise: var(--shadow-raise);
 }

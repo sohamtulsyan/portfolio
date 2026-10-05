@@ -71,10 +71,10 @@ export function ConnectForm({ email }: { email: string }) {
 
   if (status.state === "sent") {
     return (
-      <div role="status" className="glass lit-edge rounded-lg p-8">
-        <p className="text-xl font-bold text-fg">Message sent</p>
+      <div role="status" className="surface rounded-lg p-8">
+        <p className="title text-xl font-semibold text-fg">Message sent</p>
         <p className="mt-2 text-muted">Thanks for writing. I&apos;ll reply to the email you gave.</p>
-        <Button variant="ghost" className="mt-4 -ml-4" onClick={() => setStatus({ state: "idle" })}>
+        <Button variant="link" className="mt-4" onClick={() => setStatus({ state: "idle" })}>
           Send another
         </Button>
       </div>
@@ -82,7 +82,7 @@ export function ConnectForm({ email }: { email: string }) {
   }
 
   const field =
-    "w-full rounded-md border border-[var(--field-border)] bg-[var(--field-bg)] px-4 py-3 text-base text-fg placeholder:text-subtle transition-[border-color,box-shadow] duration-200 outline-none focus:border-[var(--field-focus-border)] focus:shadow-[var(--field-focus-glow)] aria-[invalid=true]:border-fg";
+    "w-full rounded-md border border-[var(--field-border)] bg-[var(--field-bg)] px-4 py-3 text-base text-fg placeholder:text-subtle transition-[border-color,box-shadow] duration-200 outline-none focus:border-[var(--field-focus-border)] focus:shadow-[var(--field-focus-ring)] aria-[invalid=true]:border-danger";
 
   const fields = [
     { name: "name", label: "Name", type: "text", autoComplete: "name" },
@@ -90,10 +90,10 @@ export function ConnectForm({ email }: { email: string }) {
   ] as const;
 
   return (
-    <form noValidate onSubmit={onSubmit} className="glass lit-edge space-y-5 rounded-lg p-6 sm:p-8">
+    <form noValidate onSubmit={onSubmit} className="surface space-y-5 rounded-lg p-6 sm:p-8">
       {fields.map((f) => (
         <div key={f.name}>
-          <label htmlFor={`${id}-${f.name}`} className="mb-2 block text-sm font-semibold text-fg">
+          <label htmlFor={`${id}-${f.name}`} className="mb-2 block text-sm font-medium text-fg">
             {f.label}
           </label>
           <input
@@ -110,7 +110,7 @@ export function ConnectForm({ email }: { email: string }) {
       ))}
 
       <div>
-        <label htmlFor={`${id}-message`} className="mb-2 block text-sm font-semibold text-fg">
+        <label htmlFor={`${id}-message`} className="mb-2 block text-sm font-medium text-fg">
           Message
         </label>
         <textarea
@@ -127,7 +127,7 @@ export function ConnectForm({ email }: { email: string }) {
       <input type="text" name="_gotcha" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
 
       {status.state === "error" ? (
-        <p role="alert" className="flex items-start gap-2 text-sm text-fg">
+        <p role="alert" className="flex items-start gap-2 text-sm text-danger">
           <CircleAlert aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
           {status.message}
         </p>
@@ -148,7 +148,7 @@ export function ConnectForm({ email }: { email: string }) {
 function FieldError({ id, message }: { id: string; message?: string }) {
   if (!message) return null;
   return (
-    <p id={id} className="mt-2 flex items-center gap-1.5 text-sm text-fg">
+    <p id={id} className="mt-2 flex items-center gap-1.5 text-sm text-danger">
       <CircleAlert aria-hidden="true" className="size-4 shrink-0" />
       {message}
     </p>

@@ -2,7 +2,10 @@ import Image from "next/image";
 import type { Project } from "@/lib/notion/types";
 import { cn } from "@/lib/utils";
 
-/** Project cover image, or a type-only cover when none is uploaded in Notion. */
+/**
+ * Project cover image, or a type-only cover when none is uploaded in Notion.
+ * Inside a `group` link, the image eases in a touch on hover.
+ */
 export function ProjectCover({
   project,
   className,
@@ -15,12 +18,19 @@ export function ProjectCover({
   sizes?: string;
 }) {
   return (
-    <div className={cn("glass lit-edge relative overflow-hidden rounded-lg", className)}>
+    <div className={cn("relative overflow-hidden rounded-lg bg-surface", className)}>
       {project.coverUrl ? (
-        <Image src={project.coverUrl} alt="" fill sizes={sizes} priority={priority} className="object-cover" />
+        <Image
+          src={project.coverUrl}
+          alt=""
+          fill
+          sizes={sizes}
+          priority={priority}
+          className="object-cover transition-transform duration-[var(--motion-slow)] ease-[var(--motion-ease-out)] group-hover:scale-[1.03]"
+        />
       ) : (
-        <div className="absolute inset-0 flex items-end p-6 sm:p-8">
-          <span aria-hidden="true" className="text-3xl leading-none font-extrabold tracking-tight text-fg/15">
+        <div className="absolute inset-0 flex items-end p-6 [background:var(--cover-placeholder)] sm:p-8">
+          <span aria-hidden="true" className="text-3xl leading-none font-semibold tracking-[-0.03em] text-fg/20">
             {project.name}
           </span>
         </div>

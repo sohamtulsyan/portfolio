@@ -15,7 +15,7 @@ export function RichText({ items }: { items: RichTextItemResponse[] }) {
       {items.map((item, i) => {
         const { bold, italic, strikethrough, underline, code } = item.annotations;
         let node: ReactNode = item.plain_text;
-        if (code) node = <code className="rounded-sm bg-glass px-1.5 py-0.5 text-[0.9em] text-fg">{node}</code>;
+        if (code) node = <code className="rounded-sm bg-surface-2 px-1.5 py-0.5 text-[0.9em] text-fg">{node}</code>;
         if (bold) node = <strong className="font-semibold text-fg">{node}</strong>;
         if (italic) node = <em>{node}</em>;
         if (strikethrough) node = <s>{node}</s>;
@@ -61,13 +61,13 @@ function Block({ block }: { block: NotionBlock }) {
       ) : null;
     case "heading_1":
       return (
-        <h2 className="mt-14 text-2xl font-bold text-fg">
+        <h2 className="mt-14 text-2xl font-semibold text-fg">
           <RichText items={block.heading_1.rich_text} />
         </h2>
       );
     case "heading_2":
       return (
-        <h3 className="mt-12 text-xl font-bold text-fg">
+        <h3 className="mt-12 text-xl font-semibold text-fg">
           <RichText items={block.heading_2.rich_text} />
         </h3>
       );
@@ -86,7 +86,7 @@ function Block({ block }: { block: NotionBlock }) {
       );
     case "callout":
       return (
-        <div className="glass rounded-md px-5 py-4 text-fg">
+        <div className="surface rounded-md px-5 py-4 text-fg">
           <RichText items={block.callout.rich_text} />
           {children}
         </div>
@@ -95,7 +95,7 @@ function Block({ block }: { block: NotionBlock }) {
       return <hr className="my-10 border-line" />;
     case "code":
       return (
-        <pre className="glass overflow-x-auto rounded-md p-5 text-sm leading-relaxed">
+        <pre className="surface overflow-x-auto rounded-md p-5 text-sm leading-relaxed">
           <code>{block.code.rich_text.map((t) => t.plain_text).join("")}</code>
         </pre>
       );
@@ -106,7 +106,7 @@ function Block({ block }: { block: NotionBlock }) {
             aria-hidden="true"
             className={cn(
               "mt-1.5 size-4 shrink-0 rounded-[4px] border border-line-strong",
-              block.to_do.checked && "bg-accent shadow-[var(--glow-sm)]",
+              block.to_do.checked && "bg-accent",
             )}
           />
           <span className={cn(block.to_do.checked && "text-subtle line-through")}>
@@ -174,7 +174,7 @@ function Block({ block }: { block: NotionBlock }) {
           href={url}
           target="_blank"
           rel="noreferrer"
-          className="glass block truncate rounded-md px-5 py-4 text-sm text-muted hover:text-fg"
+          className="surface block truncate rounded-md px-5 py-4 text-sm text-muted hover:text-fg"
         >
           {url}
         </a>
@@ -186,7 +186,7 @@ function Block({ block }: { block: NotionBlock }) {
       const src = mediaUrl(media);
       if (!src) return null;
       return (
-        <a href={src} target="_blank" rel="noreferrer" className="glass inline-block rounded-md px-5 py-3 text-sm text-fg">
+        <a href={src} target="_blank" rel="noreferrer" className="surface inline-block rounded-md px-5 py-3 text-sm text-fg">
           Open attached file
         </a>
       );
@@ -240,7 +240,7 @@ function Blocks({ blocks }: { blocks: NotionBlock[] }) {
       out.push(
         <List
           key={block.id}
-          className={cn("space-y-2 pl-5", List === "ul" ? "list-disc marker:text-accent" : "list-decimal marker:text-subtle")}
+          className={cn("space-y-2 pl-5", List === "ul" ? "list-disc marker:text-subtle" : "list-decimal marker:text-subtle")}
         >
           {items.map((item) => (
             <li key={item.id}>

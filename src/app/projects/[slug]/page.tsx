@@ -44,15 +44,15 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
 
   return (
     <article>
-      <header className="container-page pt-28 sm:pt-36">
+      <header className="container-page pt-28 sm:pt-40">
         <Link
           href="/projects"
-          className="inline-flex min-h-11 items-center gap-2 text-sm text-subtle transition-colors hover:text-fg"
+          className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-accent-text hover:underline"
         >
           <ArrowLeft aria-hidden="true" className="size-4" />
           All projects
         </Link>
-        <h1 className="mt-6 text-3xl font-bold text-fg">{project.name}</h1>
+        <h1 className="mt-6 text-3xl font-semibold text-fg">{project.name}</h1>
         {project.summary ? <p className="measure mt-5 text-lg text-muted">{project.summary}</p> : null}
 
         <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-5">
@@ -60,7 +60,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
             <dl className="flex gap-10">
               {meta.map((m) => (
                 <div key={m.label}>
-                  <dt className="text-xs text-subtle">{m.label}</dt>
+                  <dt className="meta text-xs text-subtle">{m.label}</dt>
                   <dd className="font-semibold text-fg">{m.value}</dd>
                 </div>
               ))}
@@ -105,13 +105,13 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
 
       {next && next.slug !== project.slug ? (
         <nav aria-label="Next project" className="container-page section-gap">
-          <Link href={`/projects/${next.slug}`} className="group glass lit-edge block rounded-lg p-8 sm:p-10">
-            <span className="text-sm text-subtle">Next project</span>
-            <span className="mt-2 flex items-center gap-3 text-2xl font-bold text-fg">
+          <Link href={`/projects/${next.slug}`} className="group surface block rounded-lg p-8 transition-colors duration-[var(--motion-base)] hover:bg-surface-2 sm:p-10">
+            <span className="meta text-subtle">Next project</span>
+            <span className="mt-2 flex items-center gap-3 text-2xl font-semibold tracking-[var(--type-tracking-heading)] text-fg">
               {next.name}
               <ArrowUpRight
                 aria-hidden="true"
-                className="size-6 text-subtle transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-fg"
+                className="size-6 text-subtle transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-fg"
               />
             </span>
           </Link>

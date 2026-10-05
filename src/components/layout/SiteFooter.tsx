@@ -5,24 +5,26 @@ import { SocialLinks } from "./SocialLinks";
 export function SiteFooter({ profile, socials }: { profile: Profile; socials: Social[] }) {
   const year = new Date().getFullYear();
   return (
-    <footer className="container-page section-gap pb-[calc(var(--band-height)+1rem)]">
-      <div className="flex flex-col gap-10 border-t border-line pt-12 md:flex-row md:items-end md:justify-between">
+    <footer className="container-page section-gap pb-[calc(var(--band-height)+1rem)] md:pb-14">
+      <div className="flex flex-col gap-10 border-t border-line pt-14 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-2xl font-bold">Have something worth building?</p>
+          <p className="max-w-[20ch] text-2xl font-semibold text-fg">
+            Have something worth building? <span className="text-subtle">Let&apos;s talk.</span>
+          </p>
           {profile.email ? (
             <a
               href={`mailto:${profile.email}`}
-              className="neon-text mt-3 inline-block text-xl font-semibold text-fg underline decoration-line-strong hover:decoration-fg"
+              className="mt-4 inline-block text-lg font-medium text-accent-text underline decoration-transparent underline-offset-4 transition-[text-decoration-color] duration-[var(--motion-fast)] hover:decoration-current"
             >
               {profile.email}
             </a>
           ) : (
-            <p className="mt-3 text-muted">Find me on the links here, or use the Connect page.</p>
+            <p className="mt-4 text-muted">Find me on the links here, or use the Connect page.</p>
           )}
         </div>
         <SocialLinks socials={socials} />
       </div>
-      <p className="mt-10 text-xs text-subtle">
+      <p className="meta mt-12 text-xs text-subtle">
         © {year} {profile.name}
       </p>
     </footer>

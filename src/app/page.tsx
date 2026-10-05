@@ -24,9 +24,10 @@ export default function HomePage() {
           <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
             <SectionHeading
               id="lately"
-              title="Where I've been working"
+              title="Experience."
+              lead="Where I've been working lately."
               action={
-                <Button href="/work" variant="ghost" className="-ml-4 lg:ml-0">
+                <Button href="/work" variant="link">
                   Full history
                 </Button>
               }

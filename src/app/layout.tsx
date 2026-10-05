@@ -1,17 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Urbanist } from "next/font/google";
-import { BottomBand } from "@/components/layout/BottomBand";
+import { Inter } from "next/font/google";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { splashScript } from "@/components/effects/splash-script";
+import FloatingNavigation from "@/components/nav/FloatingNavigation";
 import { site } from "@/config/site";
 import { getProfile, getSocials } from "@/lib/content";
+import { themeScript } from "@/lib/theme-script";
 import { theme } from "@/themes";
 import "./globals.css";
 
-const urbanist = Urbanist({
-  variable: "--font-urbanist",
+/** Fallback for non-Apple platforms; Apple devices get SF Pro (see --type-font-sans). */
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  axes: ["opsz"],
   display: "swap",
 });
 
@@ -32,22 +33,21 @@ export function generateMetadata(): Metadata {
 }
 
 export const viewport: Viewport = {
-  themeColor: theme.themeColor,
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: theme.themeColor.dark },
+    { media: "(prefers-color-scheme: light)", color: theme.themeColor.light },
+  ],
+  colorScheme: "dark light",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const profile = getProfile();
   const socials = getSocials();
-  const { PageTransition, Splash } = theme.slots;
 
   return (
-    <html lang={site.locale} className={urbanist.variable} suppressHydrationWarning>
+    <html lang={site.locale} className={inter.variable} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: splashScript }} />
-        <noscript>
-          <style>{".splash{display:none}"}</style>
-        </noscript>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>
         <a
@@ -56,13 +56,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
           Skip to content
         </a>
-        <Splash />
+        <FloatingNavigation socials={socials} />
         <main id="main">
           {children}
           <SiteFooter profile={profile} socials={socials} />
         </main>
-        <BottomBand socials={socials} />
-        <PageTransition />
       </body>
     </html>
   );

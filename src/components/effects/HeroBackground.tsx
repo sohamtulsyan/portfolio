@@ -6,14 +6,13 @@ import { useReducedMotion } from "motion/react";
 import { useColorTokens } from "@/lib/theme-tokens";
 import { cn } from "@/lib/utils";
 
-const LiquidWave = dynamic(() => import("./vendor/LiquidWave"), { ssr: false });
+const GradientWaves = dynamic(() => import("./vendor/GradientWaves"), { ssr: false });
 
-const TOKENS = ["--wave-color-1", "--wave-color-2", "--wave-color-3"] as const;
+const TOKENS = ["--wave-horizon-color", "--wave-body-color", "--wave-crest-color"] as const;
 
 /**
- * Hero background: RareUI Liquid Wave, coloured from the theme's
- * --wave-color-* tokens. Pointer input is read from this layer, so keep the
- * content above it `pointer-events-none` except for real controls.
+ * Hero background: React Bits Gradient Waves configured to the theme's
+ * palette (#12484c horizon, #2B7574 wave, #71677C crest).
  */
 export default function HeroBackground({ className }: { className?: string }) {
   const colors = useColorTokens(TOKENS);
@@ -22,22 +21,16 @@ export default function HeroBackground({ className }: { className?: string }) {
   return (
     <div aria-hidden="true" className={cn("absolute inset-0 overflow-hidden", className)}>
       {colors && !reduceMotion ? (
-        <LiquidWave
-          color1={colors["--wave-color-1"]}
-          color2={colors["--wave-color-2"]}
-          color3={colors["--wave-color-3"]}
-          mouseForce={26}
-          cursorSize={120}
-          resolution={0.5}
-          autoDemo
-          autoSpeed={0.5}
-          autoIntensity={3}
-          style={{
-            touchAction: "pan-y",
-            opacity: "var(--wave-opacity, 1)",
-            mixBlendMode: "var(--wave-blend, normal)" as React.CSSProperties["mixBlendMode"],
-            filter: "var(--wave-filter, none)",
-          }}
+        <GradientWaves
+          horizonColor={colors?.["--wave-horizon-color"] ?? "#12484c"}
+          waveColor={colors?.["--wave-body-color"] ?? "#2B7574"}
+          crestColor={colors?.["--wave-crest-color"] ?? "#71677C"}
+          waveRatio={0.5}
+          tilt={0.2}
+          grainIntensity={0.28}
+          mouseInteraction={false}
+          amplitude={1}
+          className="h-full w-full"
         />
       ) : null}
       {/* Floor fade so the wave settles into the page instead of ending on a hard edge */}

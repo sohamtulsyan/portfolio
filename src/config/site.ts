@@ -11,7 +11,18 @@ export const site = {
     "Soham Tulsyan is a product generalist working across product thinking, design and code.",
   locale: "en",
 
-  /** Shown in the hero when the Notion Profile has no photo yet. */
+  /**
+   * Hero illustration, one per colour scheme (transparent line art, lines
+   * tinted to each scheme's text colour). Cropped from public/hero photo/.
+   */
+  heroArt: {
+    light: "/images/hero-light.webp",
+    dark: "/images/hero-dark.webp",
+    width: 1030,
+    height: 917,
+  },
+
+  /** Used on the About page and as the share image when the Notion Profile has no photo yet. */
   portrait: {
     src: "/images/portrait.jpg",
     width: 1600,

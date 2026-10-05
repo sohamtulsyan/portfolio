@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* Active theme — swap this one line (plus src/themes/index.ts) to re-theme. */
-@import "../themes/neon-glass/theme.css";
+@import "../themes/studio/theme.css";
 
 @import "../styles/bridge.css";
 @import "../styles/base.css";

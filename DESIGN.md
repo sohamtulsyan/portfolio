@@ -8,111 +8,120 @@ single theme folder. Swap the folder and the whole site changes.
 src/themes/
 ├── index.ts              ← which theme is active (1 line)
 ├── types.ts              ← the contract every theme fulfils
-└── neon-glass/
-    ├── theme.css         ← every value: palette → semantic → components → effects
-    └── index.ts          ← which effect components fill the layout's slots
+└── studio/
+    ├── theme.css         ← every value: palette → semantic (dark + light) → components
+    └── index.ts          ← portrait mode + browser theme colours
 src/app/globals.css       ← @imports the active theme.css (1 line)
 src/styles/bridge.css     ← maps tokens onto Tailwind utilities (theme-agnostic)
-src/styles/base.css       ← element defaults + .glass / .lit-edge primitives (theme-agnostic)
+src/styles/base.css       ← element defaults + .surface / .chrome / .rise primitives
+src/lib/theme-script.ts   ← no-flash scheme script for <head>
+src/lib/theme-mode.ts     ← useThemeMode() / setThemeMode()
 ```
 
-## Current theme: Neon Glass
+## Current theme: Studio
 
-Dark, glassy surfaces lit from within. The palette is used **strictly** (no
-colours outside these five); "neon" comes from glow, blur and blend, never
-from extra hues.
+Quiet and Apple-leaning. Solid surfaces, one accent, type doing the work.
+No glows, gradients-as-decoration, shaders or page transitions.
 
 ### Palette
 
-| Token                | Hex       | Role                                               |
-| -------------------- | --------- | -------------------------------------------------- |
-| `--palette-charcoal` | `#353535` | Page background, loader background, text on light |
-| `--palette-teal`     | `#3C6E71` | The light source: primary fills, glows, the wave   |
-| `--palette-white`    | `#FFFFFF` | Primary text, active nav pill, hot highlights      |
-| `--palette-mist`     | `#D9D9D9` | Secondary text, transition wash                    |
-| `--palette-navy`     | `#284B63` | Depth: ambient bloom, portrait tint, wave shadows  |
+Four colours, used strictly. Everything else is a `color-mix()` of these.
 
-`--shadow-ink` (`#000`) is used only inside shadows, never as a visible colour.
+| Token               | Hex       | Role                                                   |
+| ------------------- | --------- | ------------------------------------------------------ |
+| `--palette-night`   | `#0E2931` | Dark-mode background, light-mode text                  |
+| `--palette-mist`    | `#E2E2E0` | Dark-mode text, light-mode background                  |
+| `--palette-teal`    | `#2B7574` | Primary: button fills, active dots, focus, selection   |
+| `--palette-crimson` | `#861211` | Errors only                                            |
 
-**Contrast rules.** Teal is too dark for text on charcoal (2.1:1), so it is
-only ever a fill or a light. Text is white (12.3:1) or mist (8.7:1); the subtle
-tier is mist at 72% (5.3:1). White text on a teal fill is 5.7:1.
+`--shadow-ink` (black) and `--highlight-ink` (white) appear only inside
+shadows, highlights and the light-mode surface lift.
 
-### Layers in `theme.css`
+### Light and dark
 
-1. **Palette**: the only hex values in the codebase.
-2. **Semantic** (`--ui-*`): `bg`, `text`, `text-muted`, `text-subtle`, `accent`, `border`, `focus`, `selection`.
-3. **Material**: `--glass-*` (frosted surfaces), `--glow-sm|md|lg` (neon halos), `--edge-gradient` (the lit hairline), `--ambient` (background blooms), `--shadow-*`.
-4. **Shape / type / layout / motion**: `--shape-*`, `--type-*`, `--layout-*`, `--motion-*`.
-5. **Components**: `--nav-*`, `--btn-primary-*`, `--btn-soft-*`, `--card-*`, `--chip-*`, `--field-*`, `--band-*`, `--portrait-*`.
-6. **Effects** (read at runtime by WebGL): `--wave-*`, `--transition-*`, `--loader-*`.
+`html[data-theme]` picks the scheme. Light mode swaps background and text.
+The head script applies the stored choice, or the system preference, before
+first paint. `setThemeMode()` stores the choice and cross-fades with the View
+Transitions API (instant under reduced motion).
+
+Contrast rules (all WCAG AA or better):
+
+- Text and muted/subtle tiers are mixes of text into background: muted 72/78%,
+  subtle 58/68% (dark/light), all ≥ 4.5:1.
+- Teal is never body text. `--ui-accent-text` lifts it toward mist in dark
+  (6.4:1) and deepens it toward night in light (5.2:1) for links.
+- Primary buttons use teal deepened 14% toward night so mist text reaches 4.5:1.
+- Error text in dark mode lifts crimson toward mist (4.8:1); light mode uses
+  crimson as is (7.7:1).
 
 ### Type
 
-Urbanist from Google Fonts, self-hosted by `next/font`. Bold (700) for
-headings, ExtraBold (800) for the hero display, Regular (400) for body.
+SF Pro on Apple devices (`-apple-system`, with optical sizes built in), Inter
+(self-hosted by `next/font`, `opsz` axis) everywhere else. Semibold (600) for
+headings and display, regular for body at 17px / 1.5.
 
-| Token                 | Size                          | Use                 |
-| --------------------- | ----------------------------- | ------------------- |
-| `--type-size-display` | clamp 3.25 → 6rem             | Hero name, 404      |
-| `--type-size-3xl`     | clamp 2.4 → 4rem              | Page titles         |
-| `--type-size-2xl`     | clamp 1.9 → 2.75rem           | Section headings    |
-| `--type-size-xl`      | clamp 1.4 → 1.75rem           | Card titles         |
-| `--type-size-lg`      | 1.25rem                       | Leads               |
-| `--type-size-base`    | 1.0625rem                     | Body                |
-| `--type-size-sm/xs`   | 0.9375 / 0.8125rem            | Meta, chips         |
+Tracking is set per size, never one value: display -0.032em, headings
+-0.022em, titles -0.014em, body -0.008em, small meta +0.004em with tabular
+numerals (`.meta`).
 
-Display tracking is -0.035em, headings -0.02em; body measure caps at 68ch.
+**Two-tone headings.** Section headings put the title in full contrast and a
+short muted sentence after it on the same line: "Selected projects. *Case
+studies across product, design and code.*" Use `SectionHeading`'s `lead` prop.
 
-### Signature moments
+### Materials
 
-- **Hero**: the name set large with a teal text-glow, over the RareUI Liquid
-  Wave. The wave blends with `screen`, so it adds light rather than paint.
-- **Lit edge**: glass panels get a gradient hairline (white → teal → navy)
-  that reads as the panel's edge catching light.
-- **Route change**: SmoothUI's Zoom Wash shader covers the swap while the
-  outgoing page blurs out.
+- `.surface`: solid raised panel (cards, forms, timeline entries). In light
+  mode surfaces lift toward white, like paper on a grey desk.
+- `.chrome`: translucent floating material for the nav capsules, with
+  backdrop blur and saturation from one `--chrome-filter` token (the CSS
+  pipeline drops `var()` nested inside `blur()`). Panels that sit over text
+  use `--chrome-bg-heavy`. Reduced transparency makes both solid.
 
-Everything else stays quiet: no scroll-triggered fade-ins, no per-card
-entrance animations.
+### Motion
+
+- **One authored entrance:** `.rise` settles hero and page-header content
+  into focus on load (fade + 14px lift + blur), staggered by `--i`.
+- Press feedback lands on pointer-down: buttons scale to 0.97 in 100ms.
+- Springs are critically damped (`bounce: 0`) everywhere except the nav's
+  original per-icon flourishes.
+- No scroll-triggered reveals, no hover glows.
+
+## Navigation
+
+- **Desktop:** three capsules across the top: socials (left, from `lg`), pages
+  (centre), theme toggle (right).
+- **Mobile:** one dock at the bottom: Home, About, Projects, Work, Connect and
+  More. More opens a sheet that rises from the dock with Résumé, a Light/Dark
+  segmented control and socials. When on /résumé, More shows the active pill.
 
 ## Component map
 
-| Slot / component     | Source                         | Themed by                     |
-| -------------------- | ------------------------------ | ----------------------------- |
-| Floating navigation  | RareUI Floating Navigation     | `--nav-*`                     |
-| Secondary button     | RareUI Soft Button             | `--btn-soft-*`                |
-| Primary button       | Local                          | `--btn-primary-*`             |
-| Hero background      | RareUI Liquid Wave (vendored)  | `--wave-*`                    |
-| Page transition      | SmoothUI Zoom Wash shader      | `--transition-*`              |
-| Bottom blur band     | SmoothUI Progressive Blur      | `--band-*`                    |
-| Loader / splash      | React Bits Lattice Loader      | `--loader-*`                  |
-
-Vendored files in `src/components/effects/vendor/` are kept unmodified so
-they can be updated from upstream; theme them through props in their
-wrappers (`HeroBackground.tsx`, `Loader.tsx`).
+| Component           | Source                    | Themed by                       |
+| ------------------- | ------------------------- | ------------------------------- |
+| Floating navigation | RareUI Floating Navigation| `--nav-*`, `.chrome`            |
+| Theme toggle        | Local                     | `--nav-*`                       |
+| Secondary button    | RareUI Soft Button        | `--btn-soft-*` (per scheme)     |
+| Primary button      | Local                     | `--btn-primary-*`               |
+| Text link           | Local (`Button variant="link"`) | `--ui-accent-text`        |
 
 ## Making a new theme
 
-1. Copy `src/themes/neon-glass/` to `src/themes/<name>/`.
-2. Change the values in `theme.css`. Keep every token name; the bridge and
-   components depend on them.
-3. In `<name>/index.ts`, rename the export and swap any slot for a
-   different component (e.g. a new `HeroBackground`). Each slot's props are
-   defined in `src/themes/types.ts`.
+1. Copy `src/themes/studio/` to `src/themes/<name>/`.
+2. Change the values in `theme.css`. Keep every token name (in both the dark
+   and light blocks); the bridge and components depend on them.
+3. Rename the export in `<name>/index.ts`.
 4. Point `src/app/globals.css` at `../themes/<name>/theme.css` and
    `src/themes/index.ts` at `./<name>`.
-
-A pure colour refresh is step 2 alone: edit the palette block.
 
 ## Rules
 
 - No hex, rgb or px colour values outside `src/themes/*/theme.css`.
-- Components use Tailwind utilities from the bridge (`bg-bg`, `text-muted`,
-  `rounded-lg`, `font-display`) or `var(--token)` in arbitrary values.
-- One radius per role: `--shape-lg` for panels, `--shape-md` for inputs,
-  `--shape-pill` for controls.
-- Glass is structural (nav, panels, forms), not decoration.
-- Every interactive element has a visible focus state and a 44px touch target.
-- Motion respects `prefers-reduced-motion`: the wave and transition switch
-  off, and the splash lifts without its fade.
+- Components use Tailwind utilities from the bridge (`bg-surface`, `text-muted`,
+  `text-accent-text`, `rounded-lg`) or `var(--token)` in arbitrary values.
+- One radius per role: `--shape-lg` for tiles and panels, `--shape-md` for
+  inputs and sheet rows, `--shape-pill` for controls.
+- Translucency is structural (floating chrome only), never decoration.
+- Every interactive element has a visible focus state and a 44px touch target
+  on mobile.
+- Motion respects `prefers-reduced-motion` (`.rise` becomes a plain fade, the
+  theme cross-fade is skipped).

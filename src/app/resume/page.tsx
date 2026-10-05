@@ -4,7 +4,7 @@ import { Download } from "lucide-react";
 import { WorkTimeline } from "@/components/sections/WorkTimeline";
 import { Button } from "@/components/ui/Button";
 import { SoftButton } from "@/components/ui/SoftButton";
-import { EmptyState, GlassPanel, PageHeader, SectionHeading } from "@/components/ui/primitives";
+import { EmptyState, Panel, PageHeader, SectionHeading } from "@/components/ui/primitives";
 import { getProfile, getProjects, getWork } from "@/lib/content";
 import { resumeHref } from "@/lib/resume";
 
@@ -22,9 +22,9 @@ export default function ResumePage() {
 
       <div className="container-page mt-12">
         {resume.available ? (
-          <GlassPanel lit className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <Panel className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
             <div>
-              <p className="text-xl font-bold text-fg">{profile.name}, résumé (PDF)</p>
+              <p className="title text-xl font-semibold text-fg">{profile.name}, résumé (PDF)</p>
               <p className="mt-1 text-sm text-subtle">Updated whenever the site rebuilds.</p>
             </div>
             <div className="flex flex-wrap gap-4">
@@ -36,7 +36,7 @@ export default function ResumePage() {
                 Open in browser
               </SoftButton>
             </div>
-          </GlassPanel>
+          </Panel>
         ) : (
           <EmptyState
             title="The PDF isn't uploaded yet"
@@ -47,7 +47,7 @@ export default function ResumePage() {
 
       <section aria-labelledby="experience" className="container-page section-gap">
         <div className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
-          <SectionHeading id="experience" title="Experience" className="lg:sticky lg:top-24 lg:self-start" />
+          <SectionHeading id="experience" title="Experience." lead="Roles, newest first." className="lg:sticky lg:top-28 lg:self-start" />
           <WorkTimeline work={work} compact />
         </div>
       </section>
@@ -55,16 +55,16 @@ export default function ResumePage() {
       {projects.length ? (
         <section aria-labelledby="resume-projects" className="container-page section-gap">
           <div className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
-            <SectionHeading id="resume-projects" title="Projects" className="lg:sticky lg:top-24 lg:self-start" />
+            <SectionHeading id="resume-projects" title="Projects." lead="A few worth a look." className="lg:sticky lg:top-28 lg:self-start" />
             <ul className="divide-y divide-line border-y border-line">
               {projects.map((p) => (
                 <li key={p.id}>
                   <Link
                     href={`/projects/${p.slug}`}
-                    className="flex min-h-14 items-baseline justify-between gap-6 py-4 transition-colors hover:text-fg"
+                    className="flex min-h-14 items-baseline justify-between gap-6 py-4 underline-offset-4 hover:underline"
                   >
-                    <span className="font-semibold text-fg">{p.name}</span>
-                    <span className="text-sm text-subtle tabular-nums">{p.year ?? ""}</span>
+                    <span className="font-medium text-fg">{p.name}</span>
+                    <span className="meta text-subtle">{p.year ?? ""}</span>
                   </Link>
                 </li>
               ))}

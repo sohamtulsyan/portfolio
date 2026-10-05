@@ -20,10 +20,10 @@ export default function ConnectPage() {
         <div>
           {profile.email ? (
             <div>
-              <p className="text-sm text-subtle">Email</p>
+              <p className="meta text-subtle">Email</p>
               <a
                 href={`mailto:${profile.email}`}
-                className="neon-text mt-1 inline-block text-xl font-bold break-all text-fg underline decoration-line-strong hover:decoration-fg sm:text-2xl"
+                className="title mt-1 inline-block text-xl font-semibold break-all text-accent-text underline decoration-transparent underline-offset-4 transition-[text-decoration-color] duration-[var(--motion-fast)] hover:decoration-current sm:text-2xl"
               >
                 {profile.email}
               </a>
@@ -40,10 +40,10 @@ export default function ConnectPage() {
                     rel="noreferrer me"
                     className="group flex min-h-16 items-center gap-4 py-3"
                   >
-                    <span className="flex size-11 items-center justify-center rounded-full border border-line text-subtle transition-[color,box-shadow,border-color] duration-300 group-hover:border-line-strong group-hover:text-fg group-hover:shadow-[var(--glow-sm)]">
+                    <span className="flex size-11 items-center justify-center rounded-full border border-line text-muted transition-[color,border-color] duration-[var(--motion-fast)] group-hover:border-line-strong group-hover:text-fg">
                       <SocialIcon platform={s.platform} className="size-[18px]" />
                     </span>
-                    <span className="flex-1 font-semibold text-fg">{s.name}</span>
+                    <span className="flex-1 font-medium text-fg">{s.name}</span>
                     {s.handle ? <span className="truncate text-sm text-subtle">{s.handle}</span> : null}
                   </a>
                 </li>

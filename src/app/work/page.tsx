@@ -9,8 +9,10 @@ export default function WorkPage() {
   return (
     <>
       <PageHeader title="Work" lead="Where I've worked, what I owned, and what shipped." />
-      <div className="container-page mt-14 max-w-4xl">
-        <WorkTimeline work={getWork()} />
+      <div className="container-page mt-14">
+        <div className="max-w-4xl">
+          <WorkTimeline work={getWork()} />
+        </div>
       </div>
     </>
   );
