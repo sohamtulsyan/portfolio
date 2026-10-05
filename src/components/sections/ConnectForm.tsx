@@ -3,14 +3,17 @@
 import { CircleAlert, LoaderCircle, Send } from "lucide-react";
 import { useId, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
+import { SoftButton } from "@/components/ui/SoftButton";
 import { cn } from "@/lib/utils";
 
 /**
- * GitHub Pages is static, so messages go to a form service instead of a server
- * (set NEXT_PUBLIC_FORM_ENDPOINT, e.g. a Formspree endpoint). Without one, the
+ * GitHub Pages is static, so messages go to Formspree over AJAX instead of a
+ * server (NEXT_PUBLIC_FORM_ENDPOINT, e.g. https://formspree.io/f/<id>). Without one, the
  * form opens the visitor's email app with the message pre-filled.
  */
 const endpoint = process.env.NEXT_PUBLIC_FORM_ENDPOINT;
+
+type FormspreeErrors = { errors?: { field?: string; message: string }[] };
 
 type Status = { state: "idle" } | { state: "sending" } | { state: "sent" } | { state: "error"; message: string };
 
@@ -54,11 +57,29 @@ export function ConnectForm({ email }: { email: string }) {
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ name, email: from, message }),
+        // Formspree reads `email` as the reply-to address and `_subject` as the email subject.
+        body: JSON.stringify({ name, email: from, message, _subject: `Portfolio message from ${name}` }),
       });
-      if (!res.ok) throw new Error(String(res.status));
-      form.reset();
-      setStatus({ state: "sent" });
+      if (res.ok) {
+        form.reset();
+        setStatus({ state: "sent" });
+        return;
+      }
+
+      // Formspree rejects bad input with 422 and { errors: [{ field?, message }] }.
+      const data = (await res.json().catch(() => null)) as FormspreeErrors | null;
+      const fieldErrors: typeof errors = {};
+      for (const err of data?.errors ?? []) {
+        if (err.field === "name" || err.field === "email" || err.field === "message") {
+          fieldErrors[err.field] = err.field === "email" ? "Enter an email I can reply to." : err.message;
+        }
+      }
+      if (Object.keys(fieldErrors).length) {
+        setErrors(fieldErrors);
+        setStatus({ state: "idle" });
+        return;
+      }
+      throw new Error(data?.errors?.[0]?.message ?? String(res.status));
     } catch {
       setStatus({
         state: "error",
@@ -133,14 +154,14 @@ export function ConnectForm({ email }: { email: string }) {
         </p>
       ) : null}
 
-      <Button type="submit" disabled={status.state === "sending"} className="w-full sm:w-auto">
+      <SoftButton type="submit" tone="primary" disabled={status.state === "sending"} className="w-full sm:w-auto">
         {status.state === "sending" ? (
           <LoaderCircle aria-hidden="true" className="size-4 animate-spin" />
         ) : (
           <Send aria-hidden="true" className="size-4" />
         )}
         {status.state === "sending" ? "Sending…" : endpoint ? "Send message" : "Write email"}
-      </Button>
+      </SoftButton>
     </form>
   );
 }

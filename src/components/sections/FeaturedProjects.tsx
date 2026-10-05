@@ -2,14 +2,16 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { EmptyState, SectionHeading, Tag } from "@/components/ui/primitives";
+import { StackList } from "@/components/ui/StackList";
 import type { Project } from "@/lib/notion/types";
+import { resolveStack } from "@/lib/tech-stack";
 import { cn } from "@/lib/utils";
 import { ProjectCover } from "./ProjectCover";
 
-/** Home page: featured projects as large alternating rows, not a card grid. */
+/** Home page: featured projects as large alternating rows, not a card grid. Sits right under the hero. */
 export function FeaturedProjects({ projects }: { projects: Project[] }) {
   return (
-    <section aria-labelledby="featured" className="container-page section-gap">
+    <section aria-labelledby="featured" className="container-page mt-20 sm:mt-24">
       <SectionHeading
         id="featured"
         title="Selected projects."
@@ -45,6 +47,7 @@ export function FeaturedProjects({ projects }: { projects: Project[] }) {
                     />
                   </h3>
                   {project.summary ? <p className="mt-4 text-muted">{project.summary}</p> : null}
+                  <StackList items={resolveStack(project.stack)} variant="icons" className="mt-5" />
                   {project.tags.length ? (
                     <div className="mt-6 flex flex-wrap gap-2">
                       {project.tags.map((tag) => (

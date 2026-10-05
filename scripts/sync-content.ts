@@ -10,10 +10,11 @@
  *      into public/cms/, rewriting URLs to those local copies,
  *   3. writes src/content/generated/snapshot.json for the site to render.
  */
+import "./load-env";
 import { createHash } from "node:crypto";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { site } from "../src/config/site";
+import { resumeFileName, site } from "../src/config/site";
 import { isNotionConfigured } from "../src/lib/notion/config";
 import { fetchBlocks, fetchProfile, fetchProjects, fetchSocials, fetchWork } from "../src/lib/notion/fetch";
 import type { NotionBlock } from "../src/lib/notion/types";
@@ -117,7 +118,13 @@ async function main() {
     profile: {
       ...profile,
       photoUrl: await localize(profile.photoUrl),
-      resumeUrl: await localize(profile.resumeUrl, site.resume.fileName),
+      resumes: Object.fromEntries(
+        await Promise.all(
+          site.resumes
+            .filter(({ id }) => profile.resumes[id])
+            .map(async ({ id, label }) => [id, await localize(profile.resumes[id]!, resumeFileName(label))]),
+        ),
+      ),
     },
     aboutBlocks,
     projects: await Promise.all(
@@ -127,7 +134,7 @@ async function main() {
         blocks: await localizeBlocks(await fetchBlocks(project.id)),
       })),
     ),
-    work,
+    work: await Promise.all(work.map(async (item) => ({ ...item, logoUrl: await localize(item.logoUrl) }))),
     socials,
   };
 

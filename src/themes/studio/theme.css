@@ -131,6 +131,13 @@
   --btn-primary-bg: color-mix(in srgb, var(--palette-teal) 86%, var(--palette-night));
   --btn-primary-bg-hover: color-mix(in srgb, var(--palette-teal) 74%, var(--palette-night));
   --btn-primary-fg: var(--palette-mist);
+  /* Same emboss as the soft button, with the light catching a teal surface */
+  --btn-primary-edge: color-mix(in srgb, var(--shadow-ink) 25%, transparent);
+  --btn-primary-shadow: 4px 4px 6px 0 color-mix(in srgb, var(--palette-mist) 5%, transparent),
+    -4px -4px 6px 0 color-mix(in srgb, var(--shadow-ink) 45%, transparent),
+    inset -4px -4px 6px 0 color-mix(in srgb, var(--palette-mist) 14%, transparent),
+    inset 4px 4px 6px 0 color-mix(in srgb, var(--shadow-ink) 35%, transparent);
+  --btn-primary-hover-shadow: 0 10px 24px -10px color-mix(in srgb, var(--shadow-ink) 70%, transparent);
 
   /* Soft button (rareui neumorphic), lit from the top-left */
   --btn-soft-fg: var(--ui-text);
@@ -152,6 +159,10 @@
   --field-border: var(--ui-border-strong);
   --field-focus-border: var(--ui-accent-text);
   --field-focus-ring: 0 0 0 4px color-mix(in srgb, var(--palette-teal) 35%, transparent);
+
+  /* Company logos sit on a light plate in both schemes (most marks are drawn for white). */
+  --logo-plate: var(--palette-mist);
+  --logo-plate-fg: var(--palette-night);
 
   --cover-placeholder: linear-gradient(
     160deg,
@@ -193,6 +204,13 @@
   --nav-tooltip-bg: var(--palette-night);
   --nav-tooltip-fg: var(--palette-mist);
 
+  --btn-primary-edge: color-mix(in srgb, var(--palette-night) 20%, transparent);
+  --btn-primary-shadow: -4px -4px 8px 0 color-mix(in srgb, var(--highlight-ink) 75%, transparent),
+    4px 4px 8px 0 color-mix(in srgb, var(--palette-night) 16%, transparent),
+    inset 2px 2px 3px 0 color-mix(in srgb, var(--highlight-ink) 28%, transparent),
+    inset -2px -2px 3px 0 color-mix(in srgb, var(--palette-night) 30%, transparent);
+  --btn-primary-hover-shadow: 0 10px 24px -12px color-mix(in srgb, var(--palette-night) 50%, transparent);
+
   --btn-soft-edge: color-mix(in srgb, var(--palette-night) 8%, transparent);
   --btn-soft-shadow: -4px -4px 8px 0 color-mix(in srgb, var(--highlight-ink) 75%, transparent),
     4px 4px 8px 0 color-mix(in srgb, var(--palette-night) 16%, transparent),
@@ -205,6 +223,8 @@
   --chip-bg: color-mix(in srgb, var(--palette-night) 6%, transparent);
   --chip-active-bg: var(--palette-night);
   --chip-active-fg: var(--palette-mist);
+
+  --logo-plate: var(--surface-2);
 
   --cover-placeholder: linear-gradient(
     160deg,

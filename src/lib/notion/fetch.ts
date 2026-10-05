@@ -40,7 +40,12 @@ export async function fetchProfile(): Promise<Profile> {
     email: prop.email(p, "Email"),
     availability: prop.select(p, "Availability") as Availability | null,
     photoUrl: prop.firstFile(p, "Photo"),
-    resumeUrl: prop.firstFile(p, "Resume"),
+    resumes: Object.fromEntries(
+      site.resumes.flatMap(({ id, notionProperty }) => {
+        const url = prop.firstFile(p, notionProperty);
+        return url ? [[id, url]] : [];
+      }),
+    ),
     aboutSummary: prop.text(p, "About Summary"),
     seoDescription: prop.text(p, "SEO Description") || site.description,
     pageId: row.id,
@@ -65,6 +70,7 @@ export async function fetchProjects(): Promise<Project[]> {
         role: prop.text(p, "Role"),
         year: prop.number(p, "Year"),
         tags: prop.multiSelect(p, "Tags"),
+        stack: prop.list(p, "Tech Stack"),
         coverUrl: prop.firstFile(p, "Cover"),
         liveUrl: prop.url(p, "Live URL"),
         repoUrl: prop.url(p, "Repo URL"),
@@ -86,6 +92,7 @@ export async function fetchWork(): Promise<WorkItem[]> {
         role: prop.text(p, "Role") || "Untitled role",
         company: prop.text(p, "Company"),
         companyUrl: prop.url(p, "Company URL"),
+        logoUrl: prop.fileOrUrl(p, "Logo"),
         type: prop.select(p, "Type") as WorkType | null,
         start,
         end,

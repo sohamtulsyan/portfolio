@@ -11,6 +11,9 @@ export const site = {
     "Soham Tulsyan is a product generalist working across product thinking, design and code.",
   locale: "en",
 
+  /** What the hero says I work across, cycled one at a time. */
+  disciplines: ["Product", "Design", "Web Dev", "ML", "Data Science", "Business Management"],
+
   /**
    * Hero illustration, one per colour scheme (transparent line art, lines
    * tinted to each scheme's text colour). Cropped from public/hero photo/.
@@ -31,15 +34,26 @@ export const site = {
     focus: "62% 40%",
   },
 
-  resume: {
-    /** Used when the Notion Profile has no Resume file. Drop a PDF in /public and set e.g. "/resume.pdf". */
-    fallbackPath: null as string | null,
-    fileName: "Soham-Tulsyan-Resume.pdf",
-  },
+  /**
+   * Résumé versions, in tab order. Each PDF is a Files property on the Notion
+   * Profile row (`notionProperty`); sync copies it to /cms/<fileName>.
+   */
+  resumes: [
+    { id: "product", label: "Product", notionProperty: "Resume (Product)" },
+    { id: "business", label: "Business", notionProperty: "Resume (Business)" },
+    { id: "dev", label: "Dev", notionProperty: "Resume (Dev)" },
+    { id: "data", label: "Data", notionProperty: "Resume (Data)" },
+    { id: "finance", label: "Finance", notionProperty: "Resume (Finance)" },
+  ],
 
   /** Content revalidation window in seconds (Notion file URLs expire after 1 hour). */
   revalidateSeconds: 900,
 } as const;
+
+export type ResumeId = (typeof site.resumes)[number]["id"];
+
+/** Download name for a version, e.g. "Soham-Tulsyan-Resume-Product.pdf". */
+export const resumeFileName = (label: string) => `${site.name.replace(/\s+/g, "-")}-Resume-${label}.pdf`;
 
 export type NavKey = "home" | "about" | "projects" | "work" | "resume" | "connect";
 

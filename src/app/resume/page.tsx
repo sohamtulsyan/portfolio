@@ -1,48 +1,25 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Download } from "lucide-react";
 import { WorkTimeline } from "@/components/sections/WorkTimeline";
-import { Button } from "@/components/ui/Button";
-import { SoftButton } from "@/components/ui/SoftButton";
-import { EmptyState, Panel, PageHeader, SectionHeading } from "@/components/ui/primitives";
+import { ResumeTabs } from "@/components/sections/ResumeTabs";
+import { PageHeader, SectionHeading } from "@/components/ui/primitives";
 import { getProfile, getProjects, getWork } from "@/lib/content";
-import { resumeHref } from "@/lib/resume";
+import { resumeVersions } from "@/lib/resume";
 
 export const metadata: Metadata = { title: "Résumé" };
 
 export default function ResumePage() {
   const profile = getProfile();
-  const resume = resumeHref(profile);
+  const versions = resumeVersions(profile);
   const work = getWork();
   const projects = getProjects().slice(0, 6);
 
   return (
     <>
-      <PageHeader title="Résumé" lead="Grab the PDF, or skim the short version below." />
+      <PageHeader title="Résumé" lead="One version per kind of role. Pick the closest fit, or skim the short version below." />
 
       <div className="container-page mt-12">
-        {resume.available ? (
-          <Panel className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
-            <div>
-              <p className="title text-xl font-semibold text-fg">{profile.name}, résumé (PDF)</p>
-              <p className="mt-1 text-sm text-subtle">Updated whenever the site rebuilds.</p>
-            </div>
-            <div className="flex flex-wrap gap-4">
-              <Button href={resume.href} download={resume.download}>
-                <Download aria-hidden="true" className="size-4" />
-                Download PDF
-              </Button>
-              <SoftButton href={resume.href} target="_blank" rel="noreferrer">
-                Open in browser
-              </SoftButton>
-            </div>
-          </Panel>
-        ) : (
-          <EmptyState
-            title="The PDF isn't uploaded yet"
-            body="In the meantime, the summary below covers the same ground, and the Connect page reaches me directly."
-          />
-        )}
+        <ResumeTabs versions={versions} name={profile.name} />
       </div>
 
       <section aria-labelledby="experience" className="container-page section-gap">

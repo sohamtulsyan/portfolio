@@ -23,7 +23,7 @@ export default function ConnectPage() {
               <p className="meta text-subtle">Email</p>
               <a
                 href={`mailto:${profile.email}`}
-                className="title mt-1 inline-block text-xl font-semibold break-all text-accent-text underline decoration-transparent underline-offset-4 transition-[text-decoration-color] duration-[var(--motion-fast)] hover:decoration-current sm:text-2xl"
+                className="title mt-1 inline-block max-w-full text-lg font-semibold [overflow-wrap:anywhere] text-accent-text underline decoration-transparent underline-offset-4 transition-[text-decoration-color] duration-[var(--motion-fast)] hover:decoration-current sm:text-xl"
               >
                 {profile.email}
               </a>

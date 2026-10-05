@@ -101,8 +101,11 @@ studies across product, design and code.*" Use `SectionHeading`'s `lead` prop.
 | Floating navigation | RareUI Floating Navigation| `--nav-*`, `.chrome`            |
 | Theme toggle        | Local                     | `--nav-*`                       |
 | Secondary button    | RareUI Soft Button        | `--btn-soft-*` (per scheme)     |
-| Primary button      | Local                     | `--btn-primary-*`               |
+| Primary button      | RareUI Soft Button, `tone="primary"` | `--btn-primary-*`  |
 | Text link           | Local (`Button variant="link"`) | `--ui-accent-text`        |
+| Hero greeting       | BadtzUI Fade Up Word (vendored as-is, `FadeUpTitle` wrapper) | display type tokens |
+| Discipline flip     | Aceternity Layout Text Flip (adapted) | `bg-surface`, `ring-line` |
+| Résumé tabs         | KokonutUI Smooth Tab (adapted) | `--btn-primary-*` pill, `bg-surface` |
 
 ## Making a new theme
 

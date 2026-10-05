@@ -26,9 +26,21 @@ export function checkbox(props: Props, name: string): boolean {
   return p?.type === "checkbox" ? p.checkbox : false;
 }
 
+/**
+ * Notion accepts URLs without a scheme ("amuselabs.com"), which a browser
+ * would resolve relative to the current page. Bare domains get https://;
+ * anything with a scheme (mailto:, tel:) or a leading / or # is kept.
+ */
+export function absoluteUrl(value: string | null | undefined): string | null {
+  const v = value?.trim();
+  if (!v) return null;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(v) || v.startsWith("/") || v.startsWith("#")) return v;
+  return `https://${v.replace(/^\/\//, "")}`;
+}
+
 export function url(props: Props, name: string): string | null {
   const p = props[name];
-  return p?.type === "url" ? p.url : null;
+  return p?.type === "url" ? absoluteUrl(p.url) : null;
 }
 
 export function email(props: Props, name: string): string {
@@ -57,7 +69,22 @@ export function firstFile(props: Props, name: string): string | null {
   const p = props[name];
   if (p?.type !== "files" || p.files.length === 0) return null;
   const f = p.files[0];
-  if (f.type === "external") return f.external.url;
+  if (f.type === "external") return absoluteUrl(f.external.url);
   if (f.type === "file") return f.file.url;
   return null;
+}
+
+/** A Files property (uploaded or "embed link") or a URL property, whichever the column is. */
+export function fileOrUrl(props: Props, name: string): string | null {
+  return props[name]?.type === "url" ? url(props, name) : firstFile(props, name);
+}
+
+/** A list from a multi-select, or from text separated by commas, semicolons or new lines. */
+export function list(props: Props, name: string): string[] {
+  const p = props[name];
+  if (p?.type === "multi_select") return multiSelect(props, name);
+  return text(props, name)
+    .split(/[,;\n]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
 }

@@ -26,7 +26,7 @@ export const emptyProfile: Profile = {
   email: "",
   availability: null,
   photoUrl: null,
-  resumeUrl: null,
+  resumes: {},
   aboutSummary: "",
   seoDescription: site.description,
   pageId: null,

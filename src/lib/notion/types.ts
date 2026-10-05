@@ -1,3 +1,4 @@
+import type { ResumeId } from "../../config/site";
 import type { BlockObjectResponse } from "@notionhq/client";
 
 export type Availability = "Open to work" | "Open to freelance" | "Not available";
@@ -11,7 +12,8 @@ export interface Profile {
   email: string;
   availability: Availability | null;
   photoUrl: string | null;
-  resumeUrl: string | null;
+  /** One PDF per résumé version (see site.resumes); null when not uploaded. */
+  resumes: Partial<Record<ResumeId, string>>;
   aboutSummary: string;
   seoDescription: string;
   /** Notion page id of the profile row; its body is the About content. */
@@ -26,6 +28,8 @@ export interface Project {
   role: string;
   year: number | null;
   tags: string[];
+  /** Tools and languages, as named in Notion ("Next.js", "Python"). Logos resolve in lib/tech-stack. */
+  stack: string[];
   coverUrl: string | null;
   liveUrl: string | null;
   repoUrl: string | null;
@@ -40,6 +44,8 @@ export interface WorkItem {
   role: string;
   company: string;
   companyUrl: string | null;
+  /** Company logo: a Notion upload (copied locally at sync) or an external link. Any aspect ratio. */
+  logoUrl: string | null;
   type: WorkType | null;
   start: string | null;
   end: string | null;

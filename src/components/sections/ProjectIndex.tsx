@@ -3,12 +3,16 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { EmptyState, Tag } from "@/components/ui/primitives";
+import { StackList } from "@/components/ui/StackList";
 import type { Project } from "@/lib/notion/types";
+import type { StackItem } from "@/lib/tech-stack";
 import { cn } from "@/lib/utils";
 import { ProjectCover } from "./ProjectCover";
 
+export type IndexProject = Project & { stackItems: StackItem[] };
+
 /** Projects page: tag filter + two-column index. */
-export function ProjectIndex({ projects }: { projects: Project[] }) {
+export function ProjectIndex({ projects }: { projects: IndexProject[] }) {
   const tags = useMemo(() => [...new Set(projects.flatMap((p) => p.tags))].sort(), [projects]);
   const [active, setActive] = useState<string | null>(null);
   const shown = active ? projects.filter((p) => p.tags.includes(active)) : projects;
@@ -63,6 +67,7 @@ export function ProjectIndex({ projects }: { projects: Project[] }) {
                 {project.year ? <span className="meta text-subtle">{project.year}</span> : null}
               </div>
               {project.summary ? <p className="mt-2 text-muted">{project.summary}</p> : null}
+              <StackList items={project.stackItems} variant="icons" className="mt-4" />
               {project.tags.length ? (
                 <div className="mt-4 flex flex-wrap gap-2">
                   {project.tags.map((tag) => (

@@ -4,10 +4,11 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { NotionRenderer } from "@/components/notion/NotionRenderer";
 import { ProjectCover } from "@/components/sections/ProjectCover";
-import { Button } from "@/components/ui/Button";
 import { SoftButton } from "@/components/ui/SoftButton";
 import { Tag } from "@/components/ui/primitives";
+import { StackList } from "@/components/ui/StackList";
 import { getProject, getProjects } from "@/lib/content";
+import { resolveStack } from "@/lib/tech-stack";
 
 export const dynamicParams = false;
 
@@ -41,6 +42,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
     { label: "Role", value: project.role },
     { label: "Year", value: project.year ? String(project.year) : "" },
   ].filter((m) => m.value);
+  const stack = resolveStack(project.stack);
 
   return (
     <article>
@@ -57,7 +59,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
 
         <div className="mt-8 flex flex-wrap items-center gap-x-10 gap-y-5">
           {meta.length ? (
-            <dl className="flex gap-10">
+            <dl className="flex flex-wrap gap-x-10 gap-y-4">
               {meta.map((m) => (
                 <div key={m.label}>
                   <dt className="meta text-xs text-subtle">{m.label}</dt>
@@ -75,12 +77,19 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
           ) : null}
         </div>
 
+        {stack.length ? (
+          <div className="mt-8">
+            <p className="meta text-xs text-subtle">Built with</p>
+            <StackList items={stack} className="mt-2" />
+          </div>
+        ) : null}
+
         {project.liveUrl || project.repoUrl ? (
           <div className="mt-8 flex flex-wrap gap-4">
             {project.liveUrl ? (
-              <Button href={project.liveUrl} target="_blank" rel="noreferrer">
+              <SoftButton href={project.liveUrl} target="_blank" rel="noreferrer" tone="primary">
                 Visit project <ArrowUpRight aria-hidden="true" className="size-4" />
-              </Button>
+              </SoftButton>
             ) : null}
             {project.repoUrl ? (
               <SoftButton href={project.repoUrl} target="_blank" rel="noreferrer">

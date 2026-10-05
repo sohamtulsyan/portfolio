@@ -5,14 +5,12 @@ import { SoftButton } from "@/components/ui/SoftButton";
 import { PageHeader } from "@/components/ui/primitives";
 import { site } from "@/config/site";
 import { getAboutBlocks, getProfile } from "@/lib/content";
-import { resumeHref } from "@/lib/resume";
 
 export const metadata: Metadata = { title: "About" };
 
 export default function AboutPage() {
   const profile = getProfile();
   const blocks = getAboutBlocks();
-  const resume = resumeHref(profile);
 
   const facts = [
     { label: "Based in", value: profile.location },
@@ -50,8 +48,8 @@ export default function AboutPage() {
             </dl>
           ) : null}
 
-          <SoftButton href={resume.href} download={resume.download} className="mt-8">
-            Download résumé
+          <SoftButton href="/resume" className="mt-8">
+            View résumé
           </SoftButton>
         </aside>
 

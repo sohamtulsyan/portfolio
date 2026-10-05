@@ -9,7 +9,7 @@ export function SiteFooter({ profile, socials }: { profile: Profile; socials: So
       <div className="flex flex-col gap-10 border-t border-line pt-14 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="max-w-[20ch] text-2xl font-semibold text-fg">
-            Have something worth building? <span className="text-subtle">Let&apos;s talk.</span>
+            Found this interesting? <span className="text-subtle">Let&apos;s connect.</span>
           </p>
           {profile.email ? (
             <a
