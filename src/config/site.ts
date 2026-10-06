@@ -62,6 +62,6 @@ export const navItems: { key: NavKey; label: string; href: string }[] = [
   { key: "about", label: "About", href: "/about" },
   { key: "projects", label: "Projects", href: "/projects" },
   { key: "work", label: "Work", href: "/work" },
-  { key: "resume", label: "Résumé", href: "/resume" },
+  { key: "resume", label: "Resume", href: "/resume" },
   { key: "connect", label: "Connect", href: "/connect" },
 ];

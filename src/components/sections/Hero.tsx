@@ -33,7 +33,7 @@ export function Hero({ profile, socials }: { profile: Profile; socials: Social[]
             <LayoutTextFlip
               text="I work across"
               words={[...site.disciplines]}
-              duration={2600}
+              duration={1500}
               className="flex-col items-start text-xl font-semibold tracking-[var(--type-tracking-title)] text-fg sm:flex-row sm:items-center"
             />
           </p>
@@ -47,7 +47,7 @@ export function Hero({ profile, socials }: { profile: Profile; socials: Social[]
 
           <div className="rise mt-9 flex flex-wrap items-center gap-4" style={step(6)}>
             <SoftButton href="/projects" tone="primary">See projects</SoftButton>
-            <SoftButton href="/resume">View résumé</SoftButton>
+            <SoftButton href="/resume">View resume</SoftButton>
           </div>
 
           <div className="rise mt-10 flex flex-wrap items-center gap-x-8 gap-y-4" style={step(7)}>

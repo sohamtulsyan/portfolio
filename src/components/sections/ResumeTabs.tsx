@@ -41,18 +41,18 @@ export function ResumeTabs({ versions, name }: { versions: ResumeVersion[]; name
 
   return (
     <SmoothTab
-      label="Résumé versions"
+      label="Resume versions"
       idPrefix="resume"
       selectedId={selectedId}
       direction={direction}
       onSelect={select}
       items={versions.map((version) => ({
         id: version.id,
-        label: `${version.label} résumé`,
+        label: `${version.label} resume`,
         title: (
           <>
             <span className="hidden sm:inline">For </span>
-            <span className="sm:lowercase">{version.label}</span>
+            <span>{version.label}</span>
           </>
         ),
         content: <ResumePanel version={version} name={name} />,
@@ -62,12 +62,12 @@ export function ResumeTabs({ versions, name }: { versions: ResumeVersion[]; name
 }
 
 function ResumePanel({ version, name }: { version: ResumeVersion; name: string }) {
-  const title = `${version.label} résumé`;
+  const title = `${version.label} resume`;
 
   if (!version.href) {
     return (
       <div className="surface rounded-lg px-6 py-12 text-center sm:px-10">
-        <p className="title text-lg font-semibold text-fg">The {version.label.toLowerCase()} résumé isn&apos;t up yet</p>
+        <p className="title text-lg font-semibold text-fg">The {version.label.toLowerCase()} resume isn&apos;t up yet</p>
         <p className="mx-auto mt-2 max-w-md text-sm text-muted">
           Another version may cover what you need, or{" "}
           <Link href="/connect" className="text-accent-text underline-offset-4 hover:underline">

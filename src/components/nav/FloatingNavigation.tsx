@@ -238,7 +238,7 @@ export default function FloatingNavigation({ socials }: { socials: Social[] }) {
                     <button
                       ref={moreRef}
                       type="button"
-                      aria-label="More: résumé, socials and theme"
+                      aria-label="More: resume, socials and theme"
                       aria-expanded={sheetOpen}
                       aria-controls={sheetId}
                       onClick={() => setSheetPath(sheetOpen ? null : pathname)}
@@ -293,7 +293,7 @@ export default function FloatingNavigation({ socials }: { socials: Social[] }) {
                   )}
                 >
                   <FileText aria-hidden="true" className="size-5" strokeWidth={1.9} />
-                  Résumé
+                  Resume
                 </Link>
 
                 <div className="mx-3 my-2 h-px bg-line" />

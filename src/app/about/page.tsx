@@ -49,7 +49,7 @@ export default function AboutPage() {
           ) : null}
 
           <SoftButton href="/resume" className="mt-8">
-            View résumé
+            View resume
           </SoftButton>
         </aside>
 
