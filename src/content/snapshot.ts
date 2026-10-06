@@ -9,11 +9,16 @@ export interface ContentSnapshot {
   profile: Profile;
   aboutBlocks: NotionBlock[];
   projects: ProjectWithBody[];
-  work: WorkItem[];
+  work: WorkWithBody[];
   socials: Social[];
 }
 
 export interface ProjectWithBody extends Project {
+  blocks: NotionBlock[];
+}
+
+/** A role plus its Notion page body (the write-up and highlights callout). */
+export interface WorkWithBody extends WorkItem {
   blocks: NotionBlock[];
 }
 

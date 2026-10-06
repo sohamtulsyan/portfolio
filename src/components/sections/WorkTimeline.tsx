@@ -1,15 +1,16 @@
 import { ArrowUpRight } from "lucide-react";
+import { NotionRenderer } from "@/components/notion/NotionRenderer";
 import { CompanyLogo } from "@/components/ui/CompanyLogo";
 import { EmptyState } from "@/components/ui/primitives";
-import type { WorkItem } from "@/lib/notion/types";
+import type { WorkWithBody } from "@/content/snapshot";
 import { cn, formatRange } from "@/lib/utils";
 
 /**
- * Work history as a hairline timeline. `compact` is the home-page summary
- * version. Once any role has a company logo, every role gets the logo column
+ * Work history as a hairline timeline. The full version shows each role's
+ * Notion page body under it; `compact` (home, résumé) is the header only. Once any role has a company logo, every role gets the logo column
  * (initials stand in) so the text stays aligned.
  */
-export function WorkTimeline({ work, compact = false }: { work: WorkItem[]; compact?: boolean }) {
+export function WorkTimeline({ work, compact = false }: { work: WorkWithBody[]; compact?: boolean }) {
   if (work.length === 0) {
     return <EmptyState title="Work history coming soon" body="Roles will show up here once they're published." />;
   }
@@ -58,14 +59,7 @@ export function WorkTimeline({ work, compact = false }: { work: WorkItem[]; comp
                     </span>
                   ) : null}
                 </p>
-                {!compact && item.summary ? <p className="mt-4 text-muted">{item.summary}</p> : null}
-                {!compact && item.highlights.length ? (
-                  <ul className="mt-4 list-disc space-y-1.5 pl-5 text-muted marker:text-subtle">
-                    {item.highlights.map((h) => (
-                      <li key={h}>{h}</li>
-                    ))}
-                  </ul>
-                ) : null}
+                {!compact ? <NotionRenderer blocks={item.blocks} variant="entry" className="mt-5" /> : null}
               </div>
             </div>
           </li>

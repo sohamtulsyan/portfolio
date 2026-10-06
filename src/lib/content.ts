@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { demoProfile, demoProjects, demoSocials, demoWork } from "@/content/demo";
-import { emptySnapshot, type ContentSnapshot, type ProjectWithBody } from "@/content/snapshot";
-import type { Profile, Social, WorkItem } from "@/lib/notion/types";
+import { emptySnapshot, type ContentSnapshot, type ProjectWithBody, type WorkWithBody } from "@/content/snapshot";
+import type { Profile, Social } from "@/lib/notion/types";
 
 /**
  * The site's content API. Server components call these at build time; they
@@ -41,8 +41,8 @@ export function getProject(slug: string) {
   return getProjects().find((p) => p.slug === slug) ?? null;
 }
 
-export function getWork(): WorkItem[] {
-  return showDemo() ? demoWork : load().work;
+export function getWork(): WorkWithBody[] {
+  return showDemo() ? demoWork.map((w) => ({ ...w, blocks: [] })) : load().work;
 }
 
 export function getSocials(): Social[] {

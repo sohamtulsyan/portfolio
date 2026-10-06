@@ -83,8 +83,6 @@ export const demoWork: WorkItem[] = [
     start: "2025-01-01",
     end: null,
     location: "Remote",
-    summary: "Sample summary of the role and its scope.",
-    highlights: ["Sample highlight one", "Sample highlight two"],
   },
   {
     id: "demo-w2",
@@ -96,8 +94,6 @@ export const demoWork: WorkItem[] = [
     start: "2024-05-01",
     end: "2024-08-01",
     location: "Bengaluru",
-    summary: "Sample summary of what was shipped.",
-    highlights: ["Sample highlight"],
   },
 ];
 

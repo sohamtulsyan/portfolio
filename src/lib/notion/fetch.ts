@@ -97,12 +97,6 @@ export async function fetchWork(): Promise<WorkItem[]> {
         start,
         end,
         location: prop.text(p, "Location"),
-        summary: prop.text(p, "Summary"),
-        highlights: prop
-          .text(p, "Highlights")
-          .split("\n")
-          .map((line) => line.replace(/^[-•*]\s*/, "").trim())
-          .filter(Boolean),
         order: prop.number(p, "Order"),
       };
     })

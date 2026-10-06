@@ -134,7 +134,13 @@ async function main() {
         blocks: await localizeBlocks(await fetchBlocks(project.id)),
       })),
     ),
-    work: await Promise.all(work.map(async (item) => ({ ...item, logoUrl: await localize(item.logoUrl) }))),
+    work: await Promise.all(
+      work.map(async (item) => ({
+        ...item,
+        logoUrl: await localize(item.logoUrl),
+        blocks: await localizeBlocks(await fetchBlocks(item.id)),
+      })),
+    ),
     socials,
   };
 

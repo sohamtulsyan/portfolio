@@ -50,8 +50,6 @@ export interface WorkItem {
   start: string | null;
   end: string | null;
   location: string;
-  summary: string;
-  highlights: string[];
 }
 
 export type SocialPlatform =

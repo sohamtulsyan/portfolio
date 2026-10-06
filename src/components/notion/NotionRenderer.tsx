@@ -5,9 +5,16 @@ import type { NotionBlock } from "@/lib/notion/types";
 import { cn } from "@/lib/utils";
 
 /**
- * Renders Notion page bodies (About, project case studies) with theme styling.
- * Covers the blocks you'd write in a portfolio; anything else is skipped.
+ * Renders Notion page bodies (About, project case studies, work roles) with
+ * theme styling. Covers the blocks you'd write in a portfolio; anything else
+ * is skipped.
+ *
+ * `variant="entry"` is for bodies nested inside a card (work roles): headings
+ * shrink to small labels, and a callout becomes an inset panel with accent
+ * bullet markers, which is where a role's highlights go.
  */
+
+type Variant = "article" | "entry";
 
 export function RichText({ items }: { items: RichTextItemResponse[] }) {
   return (
@@ -49,8 +56,35 @@ function youtubeEmbed(url: string) {
   return match ? `https://www.youtube-nocookie.com/embed/${match[1]}` : null;
 }
 
-function Block({ block }: { block: NotionBlock }) {
-  const children = block.children?.length ? <Blocks blocks={block.children} /> : null;
+function Block({ block, variant }: { block: NotionBlock; variant: Variant }) {
+  const children = block.children?.length ? <Blocks blocks={block.children} variant={variant} /> : null;
+
+  if (variant === "entry") {
+    switch (block.type) {
+      case "heading_1":
+      case "heading_2":
+      case "heading_3": {
+        const rich =
+          block.type === "heading_1" ? block.heading_1.rich_text : block.type === "heading_2" ? block.heading_2.rich_text : block.heading_3.rich_text;
+        return (
+          <h4 className="title pt-2 text-sm font-semibold text-fg first:pt-0">
+            <RichText items={rich} />
+          </h4>
+        );
+      }
+      case "callout":
+        return (
+          <div className="space-y-2 rounded-md bg-surface-2 px-5 py-4 ring-1 ring-line [&_li]:marker:text-accent-text">
+            {block.callout.rich_text.length ? (
+              <p className="font-semibold text-fg">
+                <RichText items={block.callout.rich_text} />
+              </p>
+            ) : null}
+            {children}
+          </div>
+        );
+    }
+  }
 
   switch (block.type) {
     case "paragraph":
@@ -227,7 +261,7 @@ function Block({ block }: { block: NotionBlock }) {
 }
 
 /** Groups consecutive list items so they render as real <ul>/<ol>. */
-function Blocks({ blocks }: { blocks: NotionBlock[] }) {
+function Blocks({ blocks, variant }: { blocks: NotionBlock[]; variant: Variant }) {
   const out: ReactNode[] = [];
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i];
@@ -247,23 +281,38 @@ function Blocks({ blocks }: { blocks: NotionBlock[] }) {
               <RichText
                 items={item.type === "bulleted_list_item" ? item.bulleted_list_item.rich_text : item.type === "numbered_list_item" ? item.numbered_list_item.rich_text : []}
               />
-              {item.children?.length ? <Blocks blocks={item.children} /> : null}
+              {item.children?.length ? <Blocks blocks={item.children} variant={variant} /> : null}
             </li>
           ))}
         </List>,
       );
       continue;
     }
-    out.push(<Block key={block.id} block={block} />);
+    out.push(<Block key={block.id} block={block} variant={variant} />);
   }
   return <>{out}</>;
 }
 
-export function NotionRenderer({ blocks, className }: { blocks: NotionBlock[]; className?: string }) {
+export function NotionRenderer({
+  blocks,
+  variant = "article",
+  className,
+}: {
+  blocks: NotionBlock[];
+  variant?: Variant;
+  className?: string;
+}) {
   if (blocks.length === 0) return null;
   return (
-    <div className={cn("measure space-y-5 text-base leading-relaxed text-muted", className)}>
-      <Blocks blocks={blocks} />
+    <div
+      className={cn(
+        // pre-line: soft line breaks (Shift+Enter in Notion) stay line breaks.
+        "measure text-base leading-relaxed whitespace-pre-line text-muted",
+        variant === "entry" ? "space-y-3" : "space-y-5",
+        className,
+      )}
+    >
+      <Blocks blocks={blocks} variant={variant} />
     </div>
   );
 }
